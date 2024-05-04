@@ -1,7 +1,5 @@
+import SignupForm from "@/components/SignupForm";
+
 export default function Signup() {
-    return (
-        <div>
-            <h1>你好</h1>
-        </div>
-    );
+    return <SignupForm />;
 }

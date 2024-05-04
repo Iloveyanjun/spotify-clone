@@ -12,6 +12,7 @@ const config: Config = {
                 inactive: "#B2B2B2",
                 primary: "#262626",
                 secondary: "#18181a",
+                spotify: "#1DB954",
             },
         },
     },
