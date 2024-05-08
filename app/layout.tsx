@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
+import AuthBtns from "@/components/AuthBtns";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,10 @@ export default function RootLayout({
                 <div className="flex">
                     <Sidebar />
                     <main className="flex flex-col flex-grow mx-1 rounded-md h-screen">
-                        <Header />
+                        <Header>
+                            <AuthBtns />
+                        </Header>
+
                         {children}
                     </main>
                 </div>

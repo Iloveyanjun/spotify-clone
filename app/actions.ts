@@ -36,10 +36,17 @@ export async function signup(user: unknown) {
 
     if (error) {
         console.log(error);
-        
+
         redirect("/error");
     }
     console.log("User signed up successfully!");
     revalidatePath("/", "layout");
     redirect("/");
+}
+
+export async function logout() {
+    const supabase = createClient();
+    const { error } = await supabase.auth.signOut();
+
+    return redirect("/");
 }

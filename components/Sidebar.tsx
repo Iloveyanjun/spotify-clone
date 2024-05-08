@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 export default function Sidebar() {
     const pathname = usePathname();
     let style;
-    if (pathname === "/signup") {
+    if (pathname === "/signup" || pathname === "/login") {
         style = "flex flex-col flex-grow  ml-1 h-screen max-w-60 hidden";
     } else {
         style = "flex flex-col flex-grow  ml-1 h-screen max-w-60";
