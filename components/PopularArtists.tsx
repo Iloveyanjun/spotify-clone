@@ -24,6 +24,7 @@ export default async function PopularArtists() {
             <div className="flex w-scrren overflow-hidden ">
                 {weeklyTopData?.map((artist) => (
                     <RoundedCard
+                        key={weeklyTopData.indexOf(artist)}
                         name={artist.artists}
                         image={imgs[weeklyTopData.indexOf(artist)]}
                         type="artist"
