@@ -46,7 +46,7 @@ export async function logout() {
 
     return redirect("/");
 }
-// 爬取每周受歡迎的十個歌曲, 專輯, 藝術家 
+// 爬取每周受歡迎的十個歌曲, 專輯, 藝術家
 export async function getWeeklyData() {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();

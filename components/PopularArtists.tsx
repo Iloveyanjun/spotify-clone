@@ -9,19 +9,17 @@ export default async function PopularArtists() {
     let { data: weeklyTopData, error } = await supabase
         .from("weeklyTopData")
         .select("artists");
-    console.log("Supabase" + weeklyTopData);
+
     const imgs = [] as string[];
     for (let i = 0; weeklyTopData && i < weeklyTopData.length; i++) {
         const result = await searchArtists(weeklyTopData[i]?.artists);
         imgs.push(result);
     }
 
-    console.log(imgs);
-
     return (
         <div>
-            <h1 className="font-bold mb-2">Popular artist</h1>
-            <div className="flex w-scrren overflow-hidden ">
+            <h1 className="font-bold ml-4 mb-2 text-3xl">Popular artist</h1>
+            <div className="flex w-scrren overflow-hidden flex-wrap ">
                 {weeklyTopData?.map((artist) => (
                     <RoundedCard
                         key={weeklyTopData.indexOf(artist)}
