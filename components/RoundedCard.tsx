@@ -17,6 +17,7 @@ export default function RoundedCard({
                 alt={name}
                 width={200}
                 height={200}
+                draggable={false}
             />
             <h2 className="text-white mt-2">{name}</h2>
             <h4 className="text-type">{type}</h4>

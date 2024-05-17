@@ -1,5 +1,3 @@
-
-
 export async function getAccessToken() {
     const res = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
@@ -13,7 +11,6 @@ export async function getAccessToken() {
             process.env.SPOTIFY_CLIENT_SECRET,
     });
     const data = await res.json();
-
 
     return data;
 }
@@ -50,11 +47,16 @@ export async function getAlbumsID(name: string) {
     return data.albums.items[0].id;
 }
 
-// 使用專輯ID獲取專輯圖片
-export async function getAlbumCover(albumID: string) {
+type Album = {
+    albumName: string;
+    artist: string;
+    cover: string;
+};
+
+export async function getSeveralAlbums(albumIDs: string) {
     const token = await getAccessToken();
     const response = await fetch(
-        `https://api.spotify.com/v1/albums/${albumID}`,
+        `https://api.spotify.com/v1/albums/?ids=${albumIDs}`,
         {
             method: "GET",
             headers: {
@@ -63,11 +65,14 @@ export async function getAlbumCover(albumID: string) {
         }
     );
     const data = await response.json();
-    const artist = data.artists[0].name;
-    const cover = data.images[0].url;
-    const albumName = data.name;
-
-    const result = { albumName, artist, cover };
-    // 回傳專輯名稱, 藝術家, 專輯封面的object
-    return result;
+    const array = data.albums;
+    let albums = [] as Album[];
+    // console.log(array);
+    for (let i = 0; i < array.length-1; i++) {
+        const artist = array[i].artists[0].name;
+        const albumName = array[i].name;
+        const cover = array[i].images[0].url;
+        albums.push({ albumName, artist, cover });
+    }
+    return albums;
 }

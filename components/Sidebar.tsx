@@ -10,9 +10,10 @@ export default function Sidebar() {
     const pathname = usePathname();
     let style;
     if (pathname === "/signup" || pathname === "/login") {
-        style = "flex flex-col flex-grow  ml-1 h-screen max-w-60 hidden";
+        style =
+            "flex flex-col flex-grow  ml-1 h-screen max-w-60 hidden select-none";
     } else {
-        style = "flex flex-col flex-grow  ml-1 h-screen max-w-60";
+        style = "flex flex-col flex-grow  ml-1 h-screen max-w-60 select-none";
     }
 
     return (
