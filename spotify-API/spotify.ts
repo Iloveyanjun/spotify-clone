@@ -40,6 +40,7 @@ export async function getAlbumsID(name: string) {
             headers: {
                 Authorization: "Bearer " + token.access_token,
             },
+      
         }
     );
     const data = await buh.json();
@@ -68,8 +69,14 @@ export async function getSeveralAlbums(albumIDs: string) {
     const array = data.albums;
     let albums = [] as Album[];
     // console.log(array);
-    for (let i = 0; i < array.length-1; i++) {
-        const artist = array[i].artists[0].name;
+    for (let i = 0; i < array.length - 1; i++) {
+        const artistList = array[i].artists;
+        let artist = "";
+        artistList.forEach((element: { name: string }) => {
+            artist += element.name + ", ";
+        });
+        // remove the last comma
+        artist = artist.slice(0, -2);
         const albumName = array[i].name;
         const cover = array[i].images[0].url;
         albums.push({ albumName, artist, cover });
