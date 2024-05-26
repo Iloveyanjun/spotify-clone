@@ -8,10 +8,10 @@ export default function Header({children}: {children: React.ReactNode} ) {
     let style;
     if (pathname === "/signup" || pathname === "/login") {
         style =
-            "mt-1 flex px-2 py-2 justify-between items-center bg-primary rounded-tl-md rounded-tr-md hidden select-none";
+            "hidden";
     } else {
         style =
-            "mt-1 flex px-2 py-2 justify-between items-center bg-primary rounded-tl-md rounded-tr-md select-none";
+            "mt-1 flex px-2 py-3 justify-between items-center bg-primary rounded-tl-md rounded-tr-md select-none";
     }
 
     return (

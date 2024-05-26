@@ -27,7 +27,7 @@ export default function Sidebar() {
                     <p className="ml-3 font-bold">首頁</p>
                 </Link>
                 <Link
-                    href="search"
+                    href="/search"
                     className="flex items-center text-inactive hover:text-white transition-[0.3s]"
                 >
                     <SearchIcon />

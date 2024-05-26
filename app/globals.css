@@ -20,3 +20,220 @@ body {
     color: rgb(var(--foreground-rgb));
     background: #18181a;
 }
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+/* 滾動條軌道顏色 */
+::-webkit-scrollbar-track {
+    background-color: #262626;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888; /* 滾動條顏色 */
+    border-radius: 5px;
+}
+
+/* FireFox滾動條 */
+::-moz-scrollbar {
+    width: 12px;
+}
+
+::-moz-scrollbar-track {
+    background-color: #262626;
+}
+
+::-moz-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 5px;
+}
+
+/* Edge滾動條 */
+::-ms-scrollbar {
+    width: 12px;
+}
+
+::-ms-scrollbar-track {
+    background-color: #262626;
+}
+
+::-ms-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 5px;
+}
+/*  */
+
+/* 通用样式 */
+input[type="range"] {
+    -webkit-appearance: none; /* 去掉默认样式 */
+    height: 4px; /* 滑块高度 */
+    background: #1db954; /* 滑轨背景色 */
+    border-radius: 20px;
+    outline: none;
+    opacity: 1;
+    transition: opacity 0.2s;
+    margin: 0; /* 去掉margin */
+    padding: 0; /* 去掉padding */
+}
+
+input[type="range"]:hover {
+    opacity: 1;
+}
+
+/* 初始隐藏thumb */
+input[type="range"]::-webkit-slider-thumb {
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+input[type="range"]::-moz-range-thumb {
+    opacity: 0;
+}
+
+input[type="range"]::-ms-thumb {
+    opacity: 0;
+}
+
+/* 当鼠标悬停时显示thumb */
+input[type="range"]:hover::-webkit-slider-thumb {
+    opacity: 1;
+}
+
+input[type="range"]:hover::-moz-range-thumb {
+    opacity: 1;
+}
+
+input[type="range"]:hover::-ms-thumb {
+    opacity: 1;
+}
+
+/* WebKit浏览器样式 */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white; /* 滑块颜色 */
+    cursor: pointer;
+    margin-top: -8px; /* 调整滑块位置 */
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px; /* 滑轨高度 */
+    cursor: pointer;
+    animate: 0.2s;
+    background: #ddd;
+    border-radius: 20px;
+    border: none;
+}
+
+/* Mozilla浏览器样式 */
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white; /* 滑块颜色 */
+    cursor: pointer;
+    margin-top: -8px; /* 调整滑块位置 */
+}
+
+input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: 4px; /* 滑轨高度 */
+    background: #ddd; /* 滑轨背景色 */
+    border-radius: 20px;
+    border: none;
+}
+
+/* Microsoft Edge样式 */
+input[type="range"]::-ms-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white; /* 滑块颜色 */
+    cursor: pointer;
+    margin-top: 0; /* 调整滑块位置 */
+}
+
+input[type="range"]::-ms-track {
+    width: 100%;
+    height: 4px; /* 滑轨高度 */
+    background: #ddd; /* 滑轨背景色 */
+    border-radius: 20px;
+    border: none;
+}
+
+/* 当值变化时更改滑轨的颜色 */
+input[type="range"]::-webkit-slider-runnable-track {
+    background: linear-gradient(
+        to right,
+        white var(--range-value, 0%),
+        #645f5f var(--range-value, 0%)
+    );
+}
+
+#volumeBtn:hover + input[type="range"]::-webkit-slider-runnable-track {
+    background: linear-gradient(
+        to right,
+        #1db954 var(--range-value, 0%),
+        #645f5f var(--range-value, 0%)
+    );
+}
+
+#volumeBtn:hover + input[type="range"]::-webkit-slider-thumb {
+    opacity: 1;
+}
+
+input[type="range"]::-webkit-slider-runnable-track:hover {
+    background: linear-gradient(
+        to right,
+        #1db954 var(--range-value, 0%),
+        #645f5f var(--range-value, 0%)
+    );
+}
+
+input[type="range"]::-moz-range-track {
+    background: linear-gradient(
+        to right,
+        white var(--range-value, 0%),
+        #645f5f var(--range-value, 0%)
+    );
+}
+input[type="range"]::-moz-range-track:hover {
+    background: linear-gradient(
+        to right,
+        #1db954 var(--range-value, 0%),
+        #645f5f var(--range-value, 0%)
+    );
+}
+input[type="range"]::-moz-range:hover {
+    background: linear-gradient
+        (
+            to right,
+            #1db953 var(--range-value, 0%),
+            #645f5f var(--range-value, 0%)
+        );
+}
+
+input[type="range"]::-ms-track {
+    background: linear-gradient(
+        to right,
+        white var(--range-value, 0%),
+        #645f5f var(--range-value, 0%)
+    );
+}
+
+input[type="range"]::-ms-track:hover {
+    background: linear-gradient(
+        to right,
+        #1db954 var(--range-value, 0%),
+        #645f5f var(--range-value, 0%)
+    );
+}
+
+/* 使用JavaScript来实时更新CSS变量 */
+input[type="range"].range-slider {
+    --range-value: 50%; /* 初始值 */
+}

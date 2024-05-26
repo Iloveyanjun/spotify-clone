@@ -1,5 +1,5 @@
 import RoundedCard from "@/components/RoundedCard";
-import { searchArtists } from "@/spotify-API/spotify";
+import { searchArtists } from "@/apis/spotify";
 import { createClient } from "@/utils/supabase/server";
 
 export default async function PopularArtists() {
@@ -10,21 +10,27 @@ export default async function PopularArtists() {
         .from("weeklyTopData")
         .select("artists");
 
-    const imgs = [] as string[];
-    for (let i = 0; weeklyTopData && i < weeklyTopData.length; i++) {
-        const result = await searchArtists(weeklyTopData[i]?.artists);
-        imgs.push(result);
-    }
+    const searchMultipleAlbums = async (albums: string[]) => {
+        const serachPromises = albums.map((name) => searchArtists(name));
+        const result = await Promise.all(serachPromises);
+        return result;
+    };
+
+    const artists = weeklyTopData?.map((o) => o.artists) || [];
+    const data = await searchMultipleAlbums(artists);
 
     return (
         <div>
-            <h1 className="font-bold ml-4 mb-2 text-3xl select-none">Popular artist</h1>
-            <div className="flex select-none w-scrren overflow-hidden flex-wrap ">
+            <h1 className="font-bold ml-4 mb-2 text-3xl select-none">
+                Popular artist
+            </h1>
+            <div className="flex ml-2 select-none w-scrren overflow-hidden flex-wrap ">
                 {weeklyTopData?.map((artist) => (
                     <RoundedCard
                         key={weeklyTopData.indexOf(artist)}
+                        id={data[weeklyTopData.indexOf(artist)].id}
                         name={artist.artists}
-                        image={imgs[weeklyTopData.indexOf(artist)]}
+                        image={data[weeklyTopData.indexOf(artist)].image_url}
                         type="artist"
                     />
                 ))}

@@ -66,7 +66,7 @@ export default function LoginForm() {
                     <label>Password</label>
                     <input
                         {...register("password")}
-                        type="text"
+                        type="password"
                         className="w-[324px] rounded-sm px-4 py-3 mt-2 bg-secondary border border-gray-500 hover:border-white transition-[0.3s]"
                         placeholder="Password"
                         name="password"
