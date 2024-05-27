@@ -2,6 +2,11 @@
 
 import { useTrackContext } from "@/context/player-context";
 import Link from "next/link";
+import { Roboto_Mono } from "next/font/google";
+
+const roboto_mono = Roboto_Mono({
+    subsets: ["latin"],
+});
 
 export default function AlbumTrack({
     index,
@@ -52,19 +57,13 @@ export default function AlbumTrack({
                     onSubmit={handleClick}
                     className="self-center mr-4 text-inactive"
                 >
-                    <button className="mx-4 self-center text-inactive flex items-center">
+                    <button className={`mx-4 self-center text-inactive flex items-center ${roboto_mono.className}`}>
                         {index + 1 < 10 ? (
-                            <span className="mr-1">&nbsp;</span>
+                            <span>&nbsp;</span>
                         ) : null}
                         {index + 1}
                     </button>
                 </form>
-                {/* <div className="mx-4 self-center text-inactive flex items-center">
-                    {index + 1 < 10 ? (
-                        <span className="mr-1">&nbsp;</span>
-                    ) : null}
-                    {index + 1}
-                </div> */}
                 <div className="flex flex-col">
                     {/* track name */}
                     <div className="text-base">{name}</div>
@@ -74,7 +73,7 @@ export default function AlbumTrack({
                             <div key={index} className="flex">
                                 <Link
                                     href={`/artist/${artist.id}`}
-                                    className="hover:underline"
+                                    className="hover:underline text-sm"
                                 >
                                     {artist.name}
                                 </Link>
@@ -86,7 +85,7 @@ export default function AlbumTrack({
                     </div>
                 </div>
             </div>
-            <div className="self-center mr-10">
+            <div className={`self-center mr-10 text-sm text-inactive ${roboto_mono.className}`}>
                 {mins}:{secs}
             </div>
         </div>

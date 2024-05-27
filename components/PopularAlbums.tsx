@@ -23,7 +23,7 @@ export default async function PopularAlbums() {
             <h1 className="font-bold ml-4 mb-2 mt-10 text-3xl select-none">
                 Popular albums
             </h1>
-            <div className="flex ml-2 w-scrren select-none overflow-hidden flex-wrap ">
+            <div className="flex ml-2 select-none overflow-hidden flex-wrap ">
                 {data.map((o) => (
                     <SquareCard
                         key={data.indexOf(o)}

@@ -24,7 +24,7 @@ export default async function PopularArtists() {
             <h1 className="font-bold ml-4 mb-2 text-3xl select-none">
                 Popular artist
             </h1>
-            <div className="flex ml-2 select-none w-scrren overflow-hidden flex-wrap ">
+            <div className="flex ml-2 select-none overflow-hidden flex-wrap ">
                 {weeklyTopData?.map((artist) => (
                     <RoundedCard
                         key={weeklyTopData.indexOf(artist)}

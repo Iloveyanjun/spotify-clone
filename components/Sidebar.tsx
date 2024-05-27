@@ -39,7 +39,7 @@ export default function Sidebar() {
                 <span className="ml-3">你的音樂庫</span>
             </div>
             {/* Playlists */}
-            <div className="bg-primary rounded-bl-md rounded-br-md px-3 py-2 flex-grow overflow-hidden hover:overflow-y-auto">
+            <div className="bg-primary rounded-bl-md rounded-br-md px-3 py-2 flex-grow overflow-hidden hover:overflow-y-auto pb-[100px]">
                 <div>測試1</div>
             </div>
         </div>

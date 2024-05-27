@@ -2,6 +2,12 @@
 
 import { useTrackContext } from "@/context/player-context";
 import Image from "next/image";
+import { Roboto_Mono } from "next/font/google";
+
+const roboto_mono = Roboto_Mono({
+    subsets: ["latin"],
+});
+
 
 export default function ArtistTopTrack({
     index,
@@ -46,13 +52,13 @@ export default function ArtistTopTrack({
                 onSubmit={handleClick}
                 className="self-center mr-4 text-inactive"
             >
-                <button>{index + 1}</button>
+                <button className={`${roboto_mono.className}`}>{index + 1}</button>
             </form>
             <div className="mr-3">
                 <Image src={image} alt={name} width={40} height={40} />
             </div>
             <div>{name}</div>
-            <div className="ml-auto self-center text-inactive text-sm">
+            <div className={`ml-auto self-center text-inactive text-sm ${roboto_mono.className}`}>
                 {mins}:{secs}
             </div>
         </div>
