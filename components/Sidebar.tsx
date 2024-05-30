@@ -18,7 +18,7 @@ export default function Sidebar() {
 
     return (
         <div className={style}>
-            <div className="bg-primary flex flex-col rounded-md px-3 py-2 mt-1 ">
+            <div className="bg-primary flex flex-col rounded-md px-3 py-2 mt-1">
                 <Link
                     href="/"
                     className="flex items-center mb-2 text-inactive hover:text-white transition-[0.3s] whitespace-nowrap"
@@ -34,7 +34,7 @@ export default function Sidebar() {
                     <p className="ml-3 font-bold">搜尋</p>
                 </Link>
             </div>
-            <div className="bg-primary px-3 py-2 mt-1  rounded-tl-md rounded-tr-md text-inactive flex whitespace-nowrap">
+            <div className="bg-primary px-3 py-2 mt-1  rounded-tl-md rounded-tr-md text-inactive flex whitespace-nowrap pr-10">
                 <LibraryMusicIcon />
                 <span className="ml-3">你的音樂庫</span>
             </div>

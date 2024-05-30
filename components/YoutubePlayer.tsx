@@ -130,7 +130,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     return (
         <div>
             <div id="player" ref={iframeRef} style={{ display: "none" }}></div>
-            <div className="flex flex-col items-center justify-between h-[50px]">
+            <div className="flex flex-col items-center justify-between h-[60px]">
                 <div className="pt-1">
                     <button
                         onClick={togglePlayPause}
