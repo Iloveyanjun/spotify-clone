@@ -39,6 +39,7 @@ export default function AlbumTrack({
     const handleClick = async (e: any) => {
         e.preventDefault();
         const dudes = artists.map((a) => a.name).join(", ");
+        // youtube api 使用歌曲名稱和藝術家名稱搜尋影片
         const search = `${name} ${dudes} audio`;
 
         const res = await fetch(`/api?search=${search}`);
@@ -50,20 +51,20 @@ export default function AlbumTrack({
     };
 
     return (
-        <div className="flex mx-3 justify-between py-2 hover:bg-neutral-500/10 select-none">
-            <div className="flex">
+        <div
+            className="flex mx-3 justify-between py-2 hover:bg-neutral-500/10 hover:cursor-pointer select-none"
+            onClick={handleClick}
+        >
+            <div className="flex cursor-pointer">
                 {/* index 對其第二位數字 */}
-                <form
-                    onSubmit={handleClick}
-                    className="self-center mr-4 text-inactive"
-                >
-                    <button className={`mx-4 self-center text-inactive flex items-center ${roboto_mono.className}`}>
-                        {index + 1 < 10 ? (
-                            <span>&nbsp;</span>
-                        ) : null}
+                <div className="self-center mr-4 text-inactive">
+                    <div
+                        className={`mx-4 self-center text-inactive flex items-center ${roboto_mono.className}`}
+                    >
+                        {index + 1 < 10 ? <span>&nbsp;</span> : null}
                         {index + 1}
-                    </button>
-                </form>
+                    </div>
+                </div>
                 <div className="flex flex-col">
                     {/* track name */}
                     <div className="text-base">{name}</div>
@@ -74,6 +75,7 @@ export default function AlbumTrack({
                                 <Link
                                     href={`/artist/${artist.id}`}
                                     className="hover:underline text-sm"
+                                    onClick={(e) => {e.stopPropagation();}}
                                 >
                                     {artist.name}
                                 </Link>
@@ -85,7 +87,9 @@ export default function AlbumTrack({
                     </div>
                 </div>
             </div>
-            <div className={`self-center mr-10 text-sm text-inactive ${roboto_mono.className}`}>
+            <div
+                className={`self-center mr-10 text-sm text-inactive ${roboto_mono.className} cursor-pointer`}
+            >
                 {mins}:{secs}
             </div>
         </div>

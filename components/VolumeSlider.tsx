@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import VolumeDownIcon from "@mui/icons-material/VolumeDown";
 
 type VolumeSliderProps = {
     volume: number;
@@ -34,14 +36,20 @@ export default function VolumeSlider({ volume, setVolume }: VolumeSliderProps) {
     return (
         <div className="mr-5 group">
             <button onClick={mute} className="mr-1" id="volumeBtn">
-                <VolumeUpIcon />
+                {volume === 0 ? (
+                    <VolumeOffIcon />
+                ) : volume < 50 ? (
+                    <VolumeDownIcon />
+                ) : (
+                    <VolumeUpIcon />
+                )}
             </button>
             <input
                 type="range"
                 id="volumeSlider"
                 className="range-slider ::webkit-slider-runnable-track:hover: bg-spotify"
                 value={volume}
-                min="-1"
+                min="0"
                 max="101"
                 onChange={handleChange}
                 ref={sliderRef}

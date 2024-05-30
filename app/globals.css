@@ -67,7 +67,7 @@ body {
 input[type="range"] {
     -webkit-appearance: none; /* 去掉默认样式 */
     height: 4px; /* 滑块高度 */
-    background: #1db954; /* 滑轨背景色 */
+    background: #645f5f; /* 滑轨背景色 */
     border-radius: 20px;
     outline: none;
     opacity: 1;
@@ -236,4 +236,7 @@ input[type="range"]::-ms-track:hover {
 /* 使用JavaScript来实时更新CSS变量 */
 input[type="range"].range-slider {
     --range-value: 50%; /* 初始值 */
+}
+input[type="range"].progress-slider {
+    --range-value: 0%; /* 初始值 */
 }

@@ -16,7 +16,7 @@ export default function RoundedCard({
 }) {
     return (
         <Link
-            href={`/artist/${id}`}
+            href={{ pathname: `/artist/${id}` }}
             className="relative group p-3 mt-1 hover:bg-neutral-500/10 transition group"
         >
             <Image

@@ -34,6 +34,9 @@ export default function Player() {
                                 <Link
                                     href={`/artist/${artist.id}`}
                                     className="hover:underline"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+}}
                                 >
                                     {artist.name}
                                 </Link>

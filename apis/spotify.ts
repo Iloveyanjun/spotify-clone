@@ -1,3 +1,4 @@
+"use server";
 import type { AlbumData } from "@/lib/types";
 
 // 用client_credentials取得access_token
@@ -22,6 +23,19 @@ export async function getAccessToken() {
         console.log(err);
     }
 }
+// 用藝術家id找到藝術家名稱、藝術家圖片
+export async function getArtist(artistID: string) {
+    const token = await getAccessToken();
+    const res = await fetch(`https://api.spotify.com/v1/artists/${artistID}`, {
+        method: "GET",
+        headers: {
+            Authorization: "Bearer " + token.access_token,
+        },
+    });
+    const data = await res.json();
+    return data.images[0].url;
+}
+
 // 用藝術家名字搜尋並回傳藝術家圖片
 export async function searchArtists(name: string) {
     const token = await getAccessToken();
@@ -162,4 +176,38 @@ export async function getArtistTopTracks(artistID: string) {
     }
 
     return { artist: artist.name, topTracks: topTracks };
+}
+// 用藝術家id找到藝術家的所有專輯
+export async function getArtistAlbums(artistID: string) {
+    const token = await getAccessToken();
+    const res = await fetch(
+        `https://api.spotify.com/v1/artists/${artistID}/albums?market=US&limit=40`,
+        {
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + token.access_token,
+            },
+        }
+    );
+    const data = await res.json();
+    // 專輯id, 專輯封面, 專輯名稱, 專輯發行日期
+    let albumsData: {
+        albumID: string;
+        albumImage: string;
+        albumName: string;
+        albumReleaseDate: string;
+        type: string;
+    }[] = [];
+
+    data.items.forEach((album: any) => {
+        albumsData.push({
+            albumID: album.id,
+            albumImage: album.images[0].url,
+            albumName: album.name,
+            albumReleaseDate: album.release_date,
+            type: album.type,
+        });
+    });
+
+    return albumsData;
 }
