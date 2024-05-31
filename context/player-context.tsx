@@ -7,12 +7,19 @@ type TrackContextProviderProps = {
 };
 
 type TrackContext = {
+    // spotify歌曲ID
+    spotifyTrackID: string;
+    setSpotifyTrackID: React.Dispatch<React.SetStateAction<string>>;
+    // youtube影片ID
     currentTrack: string;
     setCurrentTrack: React.Dispatch<React.SetStateAction<string>>;
+    // 歌曲封面
     trackImage: string;
     setTrackImage: React.Dispatch<React.SetStateAction<string>>;
+    // 歌曲名稱
     trackName: string;
     setTrackName: React.Dispatch<React.SetStateAction<string>>;
+    // 歌手們的名稱
     artists: { name: string; id: string }[];
     setArtists: React.Dispatch<
         React.SetStateAction<{ name: string; id: string }[]>
@@ -24,6 +31,7 @@ export const TrackContext = createContext<TrackContext | null>(null);
 export default function TrackContextProvider({
     children,
 }: TrackContextProviderProps) {
+    const [spotifyTrackID, setSpotifyTrackID] = useState("");
     const [currentTrack, setCurrentTrack] = useState("");
     const [trackImage, setTrackImage] = useState("");
     const [trackName, setTrackName] = useState("");
@@ -32,6 +40,8 @@ export default function TrackContextProvider({
     return (
         <TrackContext.Provider
             value={{
+                spotifyTrackID,
+                setSpotifyTrackID,
                 currentTrack,
                 setCurrentTrack,
                 trackImage,

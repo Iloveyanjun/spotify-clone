@@ -18,11 +18,12 @@ export default async function AlbumHeader({ id }: { id: string }) {
     const duration =
         hour > 0 ? `${hour} 小時 ${mins} 分鐘` : `${mins} 分鐘 ${secs} 秒`;
 
+
     return (
         // pb-5
         <div className="flex bg-gradient-to-b from-neutral-400 to-primary h-auto pt-14 pb-10">
             <Image
-                className="mx-5 rounded-md shadow-2xl"
+                className="mx-5 rounded-md shadow-2xl w-[200px] h-[200px] self-end"
                 src={data.cover}
                 alt="img"
                 width={200}
@@ -30,7 +31,7 @@ export default async function AlbumHeader({ id }: { id: string }) {
             />
             <div className="flex flex-col justify-end">
                 <div className="mt-10 font-bold">專輯</div>
-                <div className="text-[48px] font-bold">{data.name}</div>
+                <div className="text-[48px] font-bold ">{data.name}</div>
 
                 <div className="flex text-sm mb-1 font-bold">
                     {data.artist.map((artist, index) => (

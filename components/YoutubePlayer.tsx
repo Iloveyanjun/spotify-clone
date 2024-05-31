@@ -1,9 +1,8 @@
 "use client";
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import { useTrackContext } from "@/context/player-context";
-import { duration } from "@mui/material";
 
 interface YouTubePlayerProps {
     videoId: string;
@@ -21,13 +20,18 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     const iframeRef = useRef<HTMLDivElement>(null);
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const { currentTrack: videoID, setCurrentTrack } = useTrackContext();
-    const [previousVideoId, setPreviousVideoId] = useState<string>("");
+    // 影片播放進度 秒數
+    const [progressSec, setProgressSec] = useState<number>(0);
+    // 影片播放進度 以字串 分鐘:秒數 顯示
     const [progress, setProgress] = useState("0");
+    // 影片時間長度 以字串 分鐘:秒數 顯示
     const [duration, setDuration] = useState("");
+    const [isDragging, setIsDragging] = useState(false);
 
+    // 進度條更新顏色
     useEffect(() => {
         if (progressRef.current && playerRef.current) {
-            const currentTime = playerRef.current.getCurrentTime();
+            const currentTime = progressSec; // 使用 progressSec 更新当前时间
             const videoDuration = playerRef.current.getDuration();
             const progressPercent = (currentTime / videoDuration) * 100;
             progressRef.current.style.setProperty(
@@ -35,7 +39,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                 `${progressPercent}%`
             );
         }
-    }, [progress]);
+    }, [progressSec]);
 
     useEffect(() => {
         if (videoID) {
@@ -64,6 +68,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
         };
     }, [videoId]);
 
+    // 更新音量
     useEffect(() => {
         if (playerRef.current) {
             playerRef.current.setVolume(volume);
@@ -78,7 +83,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                 onStateChange: onPlayerStateChange, // 播放状态改变时触发
             },
             playerVars: {
-                autoplay: 1, // 1自動播放 0不自動播放
+                autoplay: 0, // 1自動播放 0不自動播放
                 controls: 0, // 隐藏播放器控件
                 modestbranding: 1, // 减少 YouTube 品牌暴露
             },
@@ -93,9 +98,9 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     };
 
     const onPlayerReady = (event: YT.PlayerEvent) => {
-        // 可以在这里控制视频
-        // event.target.playVideo(); // 自动播放视频
+        event.target.playVideo(); // 播放影片
         const getVideoDuration = playerRef.current?.getDuration();
+        // 獲得影片時間長度
         if (getVideoDuration) {
             const minutes = Math.floor(getVideoDuration / 60);
             const seconds = Math.floor(getVideoDuration % 60);
@@ -104,18 +109,36 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
 
         event.target.setVolume(volume);
         setIsPlaying(true);
+
         updateCurrentTime();
     };
 
+    // 更新目前影片播放到哪裡 每秒更新一次
     function updateCurrentTime() {
-        const currentTime = playerRef.current!.getCurrentTime();
-        const minutes = Math.floor(currentTime / 60);
-        const seconds = Math.floor(currentTime % 60);
-        setProgress(`${minutes}:${seconds.toString().padStart(2, "0")}`);
+        if (!isDragging && playerRef.current) {
+            const currentTime = playerRef.current?.getCurrentTime() || 0;
+            const minutes = Math.floor(currentTime / 60);
+            const seconds = Math.floor(currentTime % 60);
+            setProgress(`${minutes}:${seconds.toString().padStart(2, "0")}`);
+            setProgressSec(currentTime);
+        }
 
         setTimeout(updateCurrentTime, 1000); // 每秒更新一次
     }
 
+    // 拖曳進度條時 進度條以及影片播放時間更新為 拖曳的時間
+    function draggingTime(e: React.ChangeEvent<HTMLInputElement>) {
+        setIsDragging(true);
+        if (playerRef.current) {
+            const draggingTime = Number(e.target.value);
+            setProgressSec(draggingTime);
+            const minutes = Math.floor(draggingTime / 60);
+            const seconds = Math.floor(draggingTime % 60);
+            setProgress(`${minutes}:${seconds.toString().padStart(2, "0")}`);
+        }
+    }
+
+    // 播放/暫停
     const togglePlayPause = () => {
         if (playerRef.current) {
             if (isPlaying) {
@@ -127,10 +150,18 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
         }
     };
 
+    function handleMouseUp() {
+        setIsDragging(false);
+        if (playerRef.current) {
+            const value = Number(progressRef.current?.value);
+            playerRef.current?.seekTo(value, true);
+        }
+    }
+
     return (
         <div>
             <div id="player" ref={iframeRef} style={{ display: "none" }}></div>
-            <div className="flex flex-col items-center justify-between h-[50px]">
+            <div className="flex flex-col items-center justify-between h-[60px]">
                 <div className="pt-1">
                     <button
                         onClick={togglePlayPause}
@@ -152,10 +183,11 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                         id="progressSlider"
                         min={0}
                         max={playerRef.current?.getDuration()}
-                        value={playerRef.current?.getCurrentTime() || 0}
+                        value={progressSec}
                         className="w-[550px] progress-slider"
                         ref={progressRef}
-                        onChange={(e) => {console.log("HELLO") }}
+                        onChange={draggingTime}
+                        onMouseUp={handleMouseUp}
                     />
                     <div className="ml-2 p-0">{duration}</div>
                 </div>

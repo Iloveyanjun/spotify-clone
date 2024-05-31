@@ -10,7 +10,7 @@ const roboto_mono = Roboto_Mono({
 
 export default function ArtistTopTrack({
     index,
-    id, // 歌曲 spotify_id
+    id, // 歌曲 spotifyID
     name, // 歌曲名稱
     duration, // 歌曲時間
     image, // 歌曲封面
@@ -26,6 +26,7 @@ export default function ArtistTopTrack({
     artists: { name: string; id: string }[];
 }) {
     const {
+        setSpotifyTrackID,
         currentTrack,
         setCurrentTrack,
         setTrackImage,
@@ -48,6 +49,7 @@ export default function ArtistTopTrack({
         setTrackName(name);
         setTrackImage(image);
         setArtists(artists);
+        setSpotifyTrackID(id);
         setCurrentTrack(data.videoId);
     };
 

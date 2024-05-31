@@ -1,31 +1,26 @@
 "use client";
-
-import { useTrackContext } from "@/context/player-context";
+import type { PlaylistTrackData } from "@/lib/types";
 import Link from "next/link";
 import { Roboto_Mono } from "next/font/google";
+import Image from "next/image";
+import { useTrackContext } from "@/context/player-context";
 
 const roboto_mono = Roboto_Mono({
     subsets: ["latin"],
 });
 
-export default function AlbumTrack({
+export default function PlaylistTrack({
     id,
     index,
     name,
+    cover,
     artists,
     duration,
-    cover,
-}: {
-    id: string;
-    index: number;
-    name: string;
-    artists: { name: string; id: string }[];
-    duration: number;
-    cover: string;
-}) {
+    album,
+    addedAt,
+}: PlaylistTrackData) {
     const {
         setSpotifyTrackID,
-        currentTrack,
         setCurrentTrack,
         setTrackImage,
         setTrackName,
@@ -38,6 +33,13 @@ export default function AlbumTrack({
     const secs = Math.floor((duration / 1000 / 60 - mins) * 60)
         .toString()
         .padStart(2, "0");
+    // ISO 轉換為日期
+    const date = new Date(addedAt);
+    const newDate = date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
 
     const handleClick = async (e: any) => {
         e.preventDefault();
@@ -61,7 +63,7 @@ export default function AlbumTrack({
             className="flex mx-3 justify-between py-2 hover:bg-neutral-500/10 hover:cursor-pointer select-none"
             onClick={handleClick}
         >
-            <div className="flex cursor-pointer">
+            <div className="flex cursor-pointer w-[30%]">
                 {/* index顯示歌曲順序 (對其第二位數字) */}
                 <div className="self-center mr-4 text-inactive">
                     <div
@@ -70,6 +72,15 @@ export default function AlbumTrack({
                         {index + 1 < 10 ? <span>&nbsp;</span> : null}
                         {index + 1}
                     </div>
+                </div>
+                <div>
+                    <Image
+                        className="self-center rounded-md mr-2 w-12 h-12"
+                        src={cover}
+                        alt={name}
+                        width={48}
+                        height={48}
+                    />
                 </div>
                 <div className="flex flex-col">
                     {/* track name */}
@@ -95,9 +106,17 @@ export default function AlbumTrack({
                     </div>
                 </div>
             </div>
+            <div className="self-center text-inactive text-sm w-[20%] text-nowrap text-ellipsis overflow-hidden">
+                <Link href={`/album/${album.id}`} className="hover:underline">
+                    {album.name}
+                </Link>
+            </div>
+            <div className="self-center text-inactive text-sm w-[20%]">
+                {newDate}
+            </div>
             {/* 歌曲持續時間 */}
             <div
-                className={`self-center mr-10 text-sm text-inactive ${roboto_mono.className} cursor-pointer`}
+                className={`self-center mr-10 text-sm text-inactive ${roboto_mono.className} cursor-pointer w-[10%]`}
             >
                 {mins}:{secs}
             </div>

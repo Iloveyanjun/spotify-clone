@@ -1,3 +1,4 @@
+// 使用youtube api搜尋歌曲影片ID
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const search = searchParams.get("search");

@@ -40,3 +40,22 @@ export type AlbumData = {
         artists: { name: string; id: string }[];
     }[];
 };
+
+// 用來儲存藝術家陣列中的每個物件的類型
+export type Artist = {
+    name: string;
+    id: string;
+};
+
+export type PlaylistTrackData = {
+    index: number;
+    name: string;
+    // track id
+    id: string;
+    cover: string;
+    // 單曲所在專輯封面
+    duration: number;
+    addedAt: string;
+    album: { name: string; id: string };
+    artists: { name: string; id: string }[];
+};

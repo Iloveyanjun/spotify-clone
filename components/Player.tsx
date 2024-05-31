@@ -6,10 +6,18 @@ import LikeBtn from "./LikeBtn";
 import Image from "next/image";
 import { useTrackContext } from "@/context/player-context";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Player() {
-    const { currentTrack, trackImage, trackName, artists } = useTrackContext();
+    const pathname = usePathname();
+    const { spotifyTrackID, currentTrack, trackImage, trackName, artists } =
+        useTrackContext();
     const [volume, setVolume] = useState(50);
+
+    // 如果是登入或註冊頁面就不顯示播放器
+    if (pathname === "/login" || pathname === "/signup") {
+        return null;
+    }
 
     return (
         <div className="flex justify-between items-center fixed bottom-0 w-full bg-black h-20">
@@ -36,7 +44,7 @@ export default function Player() {
                                     className="hover:underline"
                                     onClick={(e) => {
                                         e.stopPropagation();
-}}
+                                    }}
                                 >
                                     {artist.name}
                                 </Link>

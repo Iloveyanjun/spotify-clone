@@ -123,7 +123,7 @@ export async function getAlbum(albumID: string) {
             artist.push({ name: a.name, id: a.id });
         });
 
-        // 單曲持續時間, 單曲名稱, 單曲id
+        // 單曲持續時間, 單曲名稱, 單曲spotifyID
         albumData.tracks.push({
             name: track.name,
             id: track.id,
@@ -210,4 +210,59 @@ export async function getArtistAlbums(artistID: string) {
     });
 
     return albumsData;
+}
+
+export async function getPlaylist(playlistID: string) {
+    const token = await getAccessToken();
+
+    const res = await fetch(
+        `https://api.spotify.com/v1/playlists/${playlistID}?market=US`,
+        {
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + token.access_token,
+            },
+        }
+    );
+    const data = await res.json();
+
+    let playlistData: {
+        name: string;
+        owner: string;
+        cover: string;
+        totalTracks: number;
+        description: string;
+        tracks: {
+            name: string;
+            id: string;
+            duration: number;
+            addedAt: string;
+            artists: { name: string; id: string }[];
+        }[];
+    } = {
+        name: data.name,
+        owner: data.owner.display_name,
+        cover: data.images[0].url,
+        totalTracks: data.tracks.total,
+        description: data.description,
+        tracks: [],
+    };
+
+    data.tracks.items.forEach((track: any) => {
+        let artists: { name: string; id: string }[] = [];
+        track.track.artists.forEach((a: { name: string; id: string }) => {
+            artists.push({ name: a.name, id: a.id });
+        });
+
+        playlistData.tracks.push({
+            name: track.track.name,
+            // 單曲id
+            id: track.track.id,
+            duration: track.track.duration_ms,
+            artists: artists,
+            addedAt: track.added_at,
+        });
+    });
+
+    return playlistData;
 }

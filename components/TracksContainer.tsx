@@ -9,6 +9,7 @@ export default async function TracksContainer({ id }: { id: string }) {
             {data.tracks.map((track, index) => (
                 <AlbumTrack
                     key={track.id}
+                    id={track.id}
                     index={index}
                     name={track.name}
                     artists={track.artists}

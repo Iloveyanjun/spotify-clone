@@ -18,7 +18,6 @@ export default async function PopularArtists() {
 
     const artists = weeklyTopData?.map((o) => o.artists) || [];
     const data = await searchMultipleAlbums(artists);
-
     return (
         <div>
             <h1 className="font-bold ml-4 mb-2 text-3xl select-none">
