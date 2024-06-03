@@ -1,22 +1,31 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
+import type { Artist } from "@/lib/types";
 
 type TrackContextProviderProps = {
     children: React.ReactNode;
 };
 
 type TrackContext = {
-    currentTrack: string;
-    setCurrentTrack: React.Dispatch<React.SetStateAction<string>>;
-    trackImage: string;
-    setTrackImage: React.Dispatch<React.SetStateAction<string>>;
-    trackName: string;
-    setTrackName: React.Dispatch<React.SetStateAction<string>>;
-    artists: { name: string; id: string }[];
-    setArtists: React.Dispatch<
-        React.SetStateAction<{ name: string; id: string }[]>
-    >;
+    // spotify歌曲ID
+    spotifyTrackID: string[];
+    setSpotifyTrackID: React.Dispatch<React.SetStateAction<string[]>>;
+    // youtube影片ID
+    currentTrack: string[];
+    setCurrentTrack: React.Dispatch<React.SetStateAction<string[]>>;
+    // 歌曲封面
+    trackImage: string[];
+    setTrackImage: React.Dispatch<React.SetStateAction<string[]>>;
+    // 歌曲名稱
+    trackName: string[];
+    setTrackName: React.Dispatch<React.SetStateAction<string[]>>;
+    // 歌手們的名稱
+    artists: Artist[][];
+    setArtists: React.Dispatch<React.SetStateAction<Artist[][]>>;
+    // 歌曲位置
+    trackIndex: number;
+    setTrackIndex: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const TrackContext = createContext<TrackContext | null>(null);
@@ -24,14 +33,18 @@ export const TrackContext = createContext<TrackContext | null>(null);
 export default function TrackContextProvider({
     children,
 }: TrackContextProviderProps) {
-    const [currentTrack, setCurrentTrack] = useState("");
-    const [trackImage, setTrackImage] = useState("");
-    const [trackName, setTrackName] = useState("");
-    const [artists, setArtists] = useState<{ name: string; id: string }[]>([]);
+    const [spotifyTrackID, setSpotifyTrackID] = useState<string[]>([""]);
+    const [currentTrack, setCurrentTrack] = useState<string[]>([""]);
+    const [trackImage, setTrackImage] = useState<string[]>([""]);
+    const [trackName, setTrackName] = useState<string[]>([""]);
+    const [artists, setArtists] = useState<Artist[][]>([[]]);
+    const [trackIndex, setTrackIndex] = useState<number>(0);
 
     return (
         <TrackContext.Provider
             value={{
+                spotifyTrackID,
+                setSpotifyTrackID,
                 currentTrack,
                 setCurrentTrack,
                 trackImage,
@@ -40,6 +53,8 @@ export default function TrackContextProvider({
                 setTrackName,
                 artists,
                 setArtists,
+                trackIndex,
+                setTrackIndex,
             }}
         >
             {children}

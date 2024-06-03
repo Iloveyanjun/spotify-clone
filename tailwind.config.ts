@@ -17,6 +17,7 @@ const config: Config = {
                 skeleton: {
                     base: "#2a2a2a",
                     content: "#242424",
+                    artist: "rgba(115, 115, 115, 0.2)",
                 },
             },
         },

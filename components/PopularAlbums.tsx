@@ -1,6 +1,8 @@
 import { searchAlbums } from "@/apis/spotify";
 import { createClient } from "@/utils/supabase/server";
 import SquareCard from "./SquareCard";
+import head from "@/public/TemporaryCropFile.jpg";
+
 export default async function PopularAlbums() {
     const supabase = createClient();
 
@@ -33,6 +35,14 @@ export default async function PopularAlbums() {
                         description={o.artist}
                     />
                 ))}
+                
+                {/* <SquareCard
+                    key="1"
+                    id="1"
+                    name="Terry Chao"
+                    image={head}
+                    description="very strong"
+                /> */}
             </div>
         </div>
     );

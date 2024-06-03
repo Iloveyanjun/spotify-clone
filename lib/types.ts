@@ -26,8 +26,8 @@ export type LoginSchema = z.infer<typeof loginSchema>;
 export type AlbumData = {
     id: string;
     name: string;
-    totalTracks: number;
     cover: string;
+    totalTracks: number;
     // 誰出的專輯
     artist: { name: string; id: string }[];
     releaseDate: string;
@@ -36,7 +36,27 @@ export type AlbumData = {
         name: string;
         id: string;
         duration: number;
+        cover: string;
         // feature artists
         artists: { name: string; id: string }[];
     }[];
+};
+
+// 用來儲存藝術家陣列中的每個物件的類型
+export type Artist = {
+    name: string;
+    id: string;
+};
+
+export type PlaylistTrackData = {
+    index: number;
+    name: string;
+    // track id
+    id: string;
+    cover: string;
+    // 單曲所在專輯封面
+    duration: number;
+    addedAt: string;
+    album: { name: string; id: string };
+    artists: { name: string; id: string }[];
 };

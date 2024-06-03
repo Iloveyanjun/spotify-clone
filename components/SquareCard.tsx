@@ -8,6 +8,7 @@ export default function SquareCard({
     name,
     image,
     description,
+    // spotify album id
     id,
 }: {
     name: string;
@@ -28,7 +29,7 @@ export default function SquareCard({
                 height={200}
                 draggable={false}
             />
-            <PlayBtn />
+            <PlayBtn type="album" id={id} />
             <h2 className="text-white mt-2 w-[200px] text-wrap">{name}</h2>
             <h4 className="text-type">{description}</h4>
         </Link>

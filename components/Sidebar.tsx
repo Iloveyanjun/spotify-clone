@@ -5,19 +5,17 @@ import SearchIcon from "@mui/icons-material/Search";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Library from "./Library";
+import Collection from "./Collection";
 
 export default function Sidebar() {
     const pathname = usePathname();
-    let style;
     if (pathname === "/signup" || pathname === "/login") {
-        style =
-            "flex flex-col flex-grow  ml-1 h-screen max-w-60 hidden select-none";
-    } else {
-        style = "flex flex-col flex-grow  ml-1 h-screen max-w-60 select-none";
+        return null;
     }
 
     return (
-        <div className={style}>
+        <div className="flex flex-col flex-grow  ml-1 h-screen min-w-[200px] max-w-60 select-none">
             <div className="bg-primary flex flex-col rounded-md px-3 py-2 mt-1">
                 <Link
                     href="/"
@@ -40,7 +38,8 @@ export default function Sidebar() {
             </div>
             {/* Playlists */}
             <div className="bg-primary rounded-bl-md rounded-br-md px-3 py-2 flex-grow overflow-hidden hover:overflow-y-auto pb-[100px]">
-                <div>測試1</div>
+                <Collection/>
+                <Library />
             </div>
         </div>
     );
