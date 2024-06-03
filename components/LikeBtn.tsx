@@ -18,7 +18,7 @@ export default function LikeBtn() {
     const likeBtn = useRef<HTMLButtonElement>(null);
     const [isLiked, setIsLiked] = useState(false);
     // 獲取spotify歌曲ID 把spotify歌曲ID添加到喜歡列表
-    const { spotifyTrackID } = useTrackContext();
+    const { spotifyTrackID, trackIndex } = useTrackContext();
 
     // 使用useEffect檢查歌曲是否已經被添加到喜歡列表
     useEffect(() => {
@@ -29,14 +29,14 @@ export default function LikeBtn() {
                     // 檢查歌曲是否已經被添加到喜歡列表
                     const liked = await checkTrackLiked(
                         user.id,
-                        spotifyTrackID
+                        spotifyTrackID[trackIndex]
                     );
                     setIsLiked(liked);
                 }
             }
         }
         checkLiked();
-    }, [spotifyTrackID]);
+    }, [trackIndex]);
 
     // 喜歡按鈕的點擊事件
     async function handleClick() {
@@ -49,19 +49,19 @@ export default function LikeBtn() {
         } else if (likeBtn.current) {
             // 如果按鈕為不喜歡狀態, 則添加動畫
             if (!isLiked) {
+                likeBtn.current.classList.add(styles.animate);
                 setTimeout(() => {
                     likeBtn.current?.classList.remove(styles.animate);
-                }, 600);
-                likeBtn.current.classList.add(styles.animate);
+                }, 300);
             }
 
             if (spotifyTrackID) {
                 if (!isLiked) {
                     // 如果有播放的歌曲, 則添加到喜歡列表
-                    await addLikedTrack(user.id, spotifyTrackID);
+                    await addLikedTrack(user.id, spotifyTrackID[trackIndex]);
                 } else {
                     // 把喜歡的歌曲從喜歡列表中移除
-                    await removeLikedTrack(user.id, spotifyTrackID);
+                    await removeLikedTrack(user.id, spotifyTrackID[trackIndex]);
                 }
                 setIsLiked(!isLiked);
             }

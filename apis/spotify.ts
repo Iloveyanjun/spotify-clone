@@ -108,8 +108,8 @@ export async function getAlbum(albumID: string) {
     let albumData: AlbumData = {
         id: data.id,
         name: data.name,
-        artist: artists,
         cover: cover,
+        artist: artists,
         totalTracks: data.total_tracks,
         releaseDate: data.release_date,
         tracks: [],
@@ -127,13 +127,14 @@ export async function getAlbum(albumID: string) {
         albumData.tracks.push({
             name: track.name,
             id: track.id,
+            cover: cover,
             duration: track.duration_ms,
             artists: artist,
         });
     });
     return albumData;
 }
-
+// 找到藝術家的5首熱門歌曲
 export async function getArtistTopTracks(artistID: string) {
     const token = await getAccessToken();
     const res = await fetch(
@@ -265,4 +266,41 @@ export async function getPlaylist(playlistID: string) {
     });
 
     return playlistData;
+}
+
+// 用歌曲id找到5首推薦歌曲
+export async function getRecommendations(seedTrack: string) {
+    const token = await getAccessToken();
+    const res = await fetch(
+        `https://api.spotify.com/v1/recommendations?limit=5&market=US&seed_tracks=${seedTrack}`,
+        {
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + token.access_token,
+            },
+        }
+    );
+    const data = await res.json();
+
+    // 從返回的5首推薦歌曲隨機選擇一首
+    const randomTrack = data.tracks[Math.floor(Math.random() * 5)];
+
+    let artists: { name: string; id: string }[] = [];
+    randomTrack.artists.forEach((a: { name: string; id: string }) => {
+        artists.push({ name: a.name, id: a.id });
+    });
+
+    const recommendations: {
+        name: string;
+        id: string;
+        cover: string;
+        artists: { name: string; id: string }[];
+    } = {
+        name: randomTrack.name,
+        id: randomTrack.id,
+        cover: randomTrack.album.images[0].url,
+        artists: artists,
+    };
+
+    return recommendations;
 }

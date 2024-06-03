@@ -3,6 +3,10 @@ import React, { useEffect, useRef, useState } from "react";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import { useTrackContext } from "@/context/player-context";
+import SkipNextIcon from "@mui/icons-material/SkipNext";
+import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
+import { get } from "http";
+import { getRecommendations } from "@/apis/spotify";
 
 interface YouTubePlayerProps {
     videoId: string;
@@ -18,14 +22,27 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     const progressRef = useRef<HTMLInputElement>(null);
     const playerRef = useRef<YT.Player | null>(null);
     const iframeRef = useRef<HTMLDivElement>(null);
+
+    const {
+        currentTrack,
+        spotifyTrackID,
+        setTrackIndex,
+        trackIndex,
+        setCurrentTrack,
+        setArtists,
+        setTrackName,
+        setTrackImage,
+        setSpotifyTrackID,
+    } = useTrackContext();
+
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
-    const { currentTrack: videoID, setCurrentTrack } = useTrackContext();
     // 影片播放進度 秒數
     const [progressSec, setProgressSec] = useState<number>(0);
     // 影片播放進度 以字串 分鐘:秒數 顯示
-    const [progress, setProgress] = useState("0");
+    const [progress, setProgress] = useState("");
     // 影片時間長度 以字串 分鐘:秒數 顯示
     const [duration, setDuration] = useState("");
+    const [durationSec, setDurationSec] = useState<number>(0);
     const [isDragging, setIsDragging] = useState(false);
 
     // 進度條更新顏色
@@ -42,7 +59,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     }, [progressSec]);
 
     useEffect(() => {
-        if (videoID) {
+        if (videoId) {
             // 检查 YouTube IFrame Player API 是否已经加载
             if (window.YT) {
                 initializePlayer();
@@ -77,7 +94,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
 
     const initializePlayer = () => {
         playerRef.current = new YT.Player(iframeRef.current!, {
-            videoId: videoID,
+            videoId: videoId,
             events: {
                 onReady: onPlayerReady,
                 onStateChange: onPlayerStateChange, // 播放状态改变时触发
@@ -93,30 +110,29 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     const onPlayerStateChange = (event: YT.OnStateChangeEvent) => {
         if (event.data === YT.PlayerState.ENDED) {
             setIsPlaying(false);
-            setCurrentTrack("");
+            nextSong();
         }
     };
 
     const onPlayerReady = (event: YT.PlayerEvent) => {
         event.target.playVideo(); // 播放影片
-        const getVideoDuration = playerRef.current?.getDuration();
-        // 獲得影片時間長度
-        if (getVideoDuration) {
+        if (playerRef.current) {
+            const getVideoDuration = playerRef.current?.getDuration();
+            // 獲得影片時間長度
             const minutes = Math.floor(getVideoDuration / 60);
             const seconds = Math.floor(getVideoDuration % 60);
             setDuration(`${minutes}:${seconds.toString().padStart(2, "0")}`);
+            setDurationSec(getVideoDuration);
+            setIsPlaying(true);
+            updateCurrentTime();
+            event.target.setVolume(volume);
         }
-
-        event.target.setVolume(volume);
-        setIsPlaying(true);
-
-        updateCurrentTime();
     };
 
     // 更新目前影片播放到哪裡 每秒更新一次
     function updateCurrentTime() {
         if (!isDragging && playerRef.current) {
-            const currentTime = playerRef.current?.getCurrentTime() || 0;
+            const currentTime = Math.floor(playerRef.current?.getCurrentTime());
             const minutes = Math.floor(currentTime / 60);
             const seconds = Math.floor(currentTime % 60);
             setProgress(`${minutes}:${seconds.toString().padStart(2, "0")}`);
@@ -149,7 +165,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
             setIsPlaying(!isPlaying);
         }
     };
-
+    // 拖曳進度條結束時 更新影片播放時間
     function handleMouseUp() {
         setIsDragging(false);
         if (playerRef.current) {
@@ -158,20 +174,75 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
         }
     }
 
+    // Next song
+    async function nextSong() {
+        if (playerRef.current && trackIndex < currentTrack.length - 1) {
+            setTrackIndex((preIndex) => preIndex + 1);
+        } else {
+            // 如果是最後一首歌 就推薦一首隨機歌曲
+            console.log(trackIndex);
+            const data = await getRecommendations(spotifyTrackID[trackIndex]);
+            const dudes = data.artists.map((a) => a.name).join(", ");
+            // youtube api 使用歌曲名稱和藝術家名稱搜尋歌曲, 回傳youtube影片ID
+            const search = `${data.name} ${dudes} audio`;
+            const res = await fetch(`/api?search=${search}`);
+            const video = await res.json();
+            setTrackName((preTrackName) => [...preTrackName, data.name]);
+            setTrackImage((preTrackCover) => [...preTrackCover, data.cover]);
+            setArtists((preArtists) => [...preArtists, data.artists]);
+            // 這是spotify歌曲ID
+            setSpotifyTrackID((preID) => [...preID, data.id]);
+            // 這是youtube影片ID 更新目前的歌曲
+            setCurrentTrack((preCurrentTrack) => [
+                ...preCurrentTrack,
+                video.videoId,
+            ]);
+            setTrackIndex(currentTrack.length);
+        }
+    }
+
+    function previousSong() {
+        if (playerRef.current && trackIndex > 1) {
+            setTrackIndex((preIndex) => preIndex - 1);
+        }
+        console.log(trackIndex);
+    }
+
     return (
         <div>
             <div id="player" ref={iframeRef} style={{ display: "none" }}></div>
             <div className="flex flex-col items-center justify-between h-[60px]">
-                <div className="pt-1">
+                <div className="flex justify-between pt-1 w-[150px]">
+                    <button className="relative group" onClick={previousSong}>
+                        <SkipPreviousIcon
+                            fontSize="large"
+                            className="text-inactive hover:text-white"
+                        />
+                        <span className="absolute top-[-75%] left-1/2 group-hover:delay-300 transform -translate-x-1/2 bg-secondary text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            Previous
+                        </span>
+                    </button>
                     <button
                         onClick={togglePlayPause}
-                        className="active:scale-[1.1]"
+                        className="active:scale-[1.1] relative group"
                     >
                         {isPlaying ? (
                             <PauseCircleIcon fontSize="large" />
                         ) : (
                             <PlayCircleIcon fontSize="large" />
                         )}
+                        <span className="absolute top-[-75%] left-1/2 group-hover:delay-300 transform -translate-x-1/2 bg-secondary text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            {isPlaying ? "Pause" : "Play"}
+                        </span>
+                    </button>
+                    <button className="relative group" onClick={nextSong}>
+                        <SkipNextIcon
+                            fontSize="large"
+                            className="text-inactive hover:text-white"
+                        />
+                        <span className="absolute top-[-75%] left-1/2 transform -translate-x-1/2 bg-secondary text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 group-hover:delay-300 transition-opacity duration-300">
+                            Next
+                        </span>
                     </button>
                 </div>
                 <div className="flex items-center text-inactive">
@@ -182,9 +253,9 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                         type="range"
                         id="progressSlider"
                         min={0}
-                        max={playerRef.current?.getDuration()}
+                        max={durationSec}
                         value={progressSec}
-                        className="w-[550px] progress-slider"
+                        className="lg:w-[550px] md:w-[350px] sm:w-[200px] progress-slider"
                         ref={progressRef}
                         onChange={draggingTime}
                         onMouseUp={handleMouseUp}

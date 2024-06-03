@@ -28,7 +28,7 @@ export default function RoundedCard({
                 draggable={false}
                 priority
             />
-            <PlayBtn />
+            <PlayBtn type="artist" id={id}/>
             <h2 className="text-white mt-2">{name}</h2>
             <h4 className="text-type">{type}</h4>
         </Link>

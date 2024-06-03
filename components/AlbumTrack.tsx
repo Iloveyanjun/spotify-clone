@@ -3,6 +3,7 @@
 import { useTrackContext } from "@/context/player-context";
 import Link from "next/link";
 import { Roboto_Mono } from "next/font/google";
+import { set } from "zod";
 
 const roboto_mono = Roboto_Mono({
     subsets: ["latin"],
@@ -24,12 +25,13 @@ export default function AlbumTrack({
     cover: string;
 }) {
     const {
-        setSpotifyTrackID,
         currentTrack,
+        setSpotifyTrackID,
         setCurrentTrack,
         setTrackImage,
         setTrackName,
         setArtists,
+        setTrackIndex,
     } = useTrackContext();
 
     // 計算歌曲時間
@@ -47,13 +49,17 @@ export default function AlbumTrack({
         const search = `${name} ${dudes} audio`;
         const res = await fetch(`/api?search=${search}`);
         const data = await res.json();
-        setTrackName(name);
-        setTrackImage(cover);
-        setArtists(artists);
+        setTrackName((preTrackName) => [...preTrackName, name]);
+        setTrackImage((preTrackCover) => [...preTrackCover, cover]);
+        setArtists((preArtists) => [...preArtists, artists]);
         // 這是spotify歌曲ID
-        setSpotifyTrackID(id);
+        setSpotifyTrackID((preID) => [...preID, id]);
         // 這是youtube影片ID 更新目前的歌曲
-        setCurrentTrack(data.videoId);
+        setCurrentTrack((preCurrentTrack) => [
+            ...preCurrentTrack,
+            data.videoId,
+        ]);
+        setTrackIndex(currentTrack.length);
     };
 
     return (

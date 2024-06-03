@@ -32,6 +32,7 @@ export default function ArtistTopTrack({
         setTrackImage,
         setTrackName,
         setArtists,
+        setTrackIndex,
     } = useTrackContext();
 
     const mins = Math.floor(duration / 1000 / 60);
@@ -46,11 +47,15 @@ export default function ArtistTopTrack({
 
         const res = await fetch(`/api?search=${search}`);
         const data = await res.json();
-        setTrackName(name);
-        setTrackImage(image);
-        setArtists(artists);
-        setSpotifyTrackID(id);
-        setCurrentTrack(data.videoId);
+        setTrackName((preTrackName) => [...preTrackName, name]);
+        setTrackImage((preTrackCover) => [...preTrackCover, image]);
+        setArtists((preArtists) => [...preArtists, artists.map((a) => a)]);
+        setSpotifyTrackID((preID) => [...preID, id]);
+        setCurrentTrack((preCurrentTrack) => [
+            ...preCurrentTrack,
+            data.videoId,
+        ]);
+        setTrackIndex(currentTrack.length);
     };
 
     return (

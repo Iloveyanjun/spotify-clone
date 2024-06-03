@@ -17,7 +17,7 @@ export default function Library() {
     return (
         <div>
             {/* content */}
-            <LibraryContent name="Homer" id="123" artist="Homer" type="artist"/>
+            <LibraryContent name="buh" id="123" artist="buh" type="artist"/>
         </div>
     );
 }

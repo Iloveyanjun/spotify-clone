@@ -1,4 +1,5 @@
 import Image from "next/image";
+import grogu from "@/public/grogu.jpg";
 
 export default function LibraryContent({
     // album/playlist/track name
@@ -22,7 +23,7 @@ export default function LibraryContent({
         <div className="flex p-2 rounded-md hover:bg-neutral-500/20">
             <Image
                 className={`${style}`}
-                src="https://i.scdn.co/image/ab6761610000e5eb6e835a500e791bf9c27a422a"
+                src={grogu}
                 width={48}
                 height={48}
                 alt="image"

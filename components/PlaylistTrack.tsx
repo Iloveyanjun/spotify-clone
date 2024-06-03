@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Roboto_Mono } from "next/font/google";
 import Image from "next/image";
 import { useTrackContext } from "@/context/player-context";
+import { set } from "zod";
 
 const roboto_mono = Roboto_Mono({
     subsets: ["latin"],
@@ -20,11 +21,13 @@ export default function PlaylistTrack({
     addedAt,
 }: PlaylistTrackData) {
     const {
+        currentTrack,
         setSpotifyTrackID,
         setCurrentTrack,
         setTrackImage,
         setTrackName,
         setArtists,
+        setTrackIndex,
     } = useTrackContext();
 
     // 計算歌曲時間
@@ -49,13 +52,17 @@ export default function PlaylistTrack({
         const search = `${name} ${dudes} audio`;
         const res = await fetch(`/api?search=${search}`);
         const data = await res.json();
-        setTrackName(name);
-        setTrackImage(cover);
-        setArtists(artists);
+        setTrackName((preTrackName) => [...preTrackName, name]);
+        setTrackImage((preTrackCover) => [...preTrackCover, cover]);
+        setArtists((preArtists) => [...preArtists, artists]);
         // 這是spotify歌曲ID
-        setSpotifyTrackID(id);
+        setSpotifyTrackID((preID) => [...preID, id]);
         // 這是youtube影片ID 更新目前的歌曲
-        setCurrentTrack(data.videoId);
+        setCurrentTrack((preCurrentTrack) => [
+            ...preCurrentTrack,
+            data.videoId,
+        ]);
+        setTrackIndex(currentTrack.length);
     };
 
     return (
@@ -107,7 +114,13 @@ export default function PlaylistTrack({
                 </div>
             </div>
             <div className="self-center text-inactive text-sm w-[20%] text-nowrap text-ellipsis overflow-hidden">
-                <Link href={`/album/${album.id}`} className="hover:underline">
+                <Link
+                    href={`/album/${album.id}`}
+                    className="hover:underline"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                    }}
+                >
                     {album.name}
                 </Link>
             </div>
