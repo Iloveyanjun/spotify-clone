@@ -1,5 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+
 import { revalidatePath } from "next/cache";
 
 // 爬取每周受歡迎的十個歌曲, 專輯, 藝術家
