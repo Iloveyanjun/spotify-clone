@@ -7,10 +7,12 @@ import puppeteer from "puppeteer-core";
 export async function GET(req: Request) {
     const browser = await puppeteer.launch({
         args: chromium.args,
-        // See https://www.npmjs.com/package/@sparticuz/chromium#running-locally--headlessheadful-mode for local executable path
+        defaultViewport: chromium.defaultViewport,
         executablePath: await chromium.executablePath(),
-        headless: true,
+        headless: chromium.headless,
+        ignoreHTTPSErrors: true,
     });
+
     const page = await browser.newPage();
     await page.goto(process.env.SPOTIFY_CHART_URL!);
 
