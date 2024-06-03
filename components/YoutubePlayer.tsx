@@ -202,12 +202,11 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     }
 
     function previousSong() {
-        if (playerRef.current && trackIndex > 1) {
+        if (playerRef.current && trackIndex > 0 && spotifyTrackID[0] !== "") {
             setTrackIndex((preIndex) => preIndex - 1);
         }
         console.log(trackIndex);
     }
-
     return (
         <div>
             <div id="player" ref={iframeRef} style={{ display: "none" }}></div>
