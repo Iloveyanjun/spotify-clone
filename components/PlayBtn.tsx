@@ -3,10 +3,11 @@
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { getAlbum, getArtistTopTracks } from "@/apis/spotify";
 import { useTrackContext } from "@/context/player-context";
-import { Artist } from "@/lib/types";
+import { Artist, Track } from "@/lib/types";
 
 export default function PlayBtn({ type, id }: { type: string; id: string }) {
     const {
+        trackIndex,
         setSpotifyTrackID,
         setCurrentTrack,
         setTrackImage,
@@ -15,35 +16,35 @@ export default function PlayBtn({ type, id }: { type: string; id: string }) {
         setTrackIndex,
     } = useTrackContext();
 
-    const fetchYoutubeID = async (
-        tracks: {
-            name: string;
-            artists: Artist[];
-            // spotify id
-            id: string;
-        }[]
-    ) => {
-        const fetchPromises = tracks.map(async (track) => {
-            const dudes = track.artists.map((a: Artist) => a.name).join(", ");
-            const search = `${track.name} ${dudes} audio`;
-            const res = await fetch(`/api?search=${search}`);
-            const data = await res.json();
-            return data;
-        });
-        const result = await Promise.all(fetchPromises);
-        return result;
+    const fetchYoutubeID = async (track: {
+        name: string;
+        artists: Artist[];
+        // spotify id
+        id: string;
+    }) => {
+        const dudes = track.artists.map((a: Artist) => a.name).join(", ");
+        const search = `${track.name} ${dudes} audio`;
+        const res = await fetch(`/api?search=${search}`);
+        const data = await res.json();
+        return data;
     };
 
-    const fetchAndSet = async (
-        tracks: { name: string; artists: Artist[]; id: string; cover: string }[]
-    ) => {
-        const youtubeIDs = await fetchYoutubeID(tracks);
+    const fetchAndSet = async (tracks: Track[]) => {
+        // 把所有spotify提供的每首track的id, 封面, 名稱, 演出者存進context
         setSpotifyTrackID(tracks.map((track) => track.id));
-        setCurrentTrack(youtubeIDs.map((o) => o.videoId));
         setTrackImage(tracks.map((track) => track.cover));
         setTrackName(tracks.map((track) => track.name));
         setArtists(tracks.map((track) => track.artists));
         setTrackIndex(0);
+        // 使用youtube api搜尋每首歌曲的影片id
+        const youtubeID = await fetchYoutubeID(tracks[trackIndex]);
+        if (youtubeID.videoId) {
+            setCurrentTrack([]);
+            setCurrentTrack((preCurrentTrack) => [
+                ...preCurrentTrack,
+                youtubeID.videoId,
+            ]);
+        } else console.log("exceed youtube api limit");
     };
 
     const handlePlay = async (e: React.MouseEvent<HTMLButtonElement>) => {

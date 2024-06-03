@@ -5,8 +5,8 @@ import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import { useTrackContext } from "@/context/player-context";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import { get } from "http";
 import { getRecommendations } from "@/apis/spotify";
+import { Artist } from "@/lib/types";
 
 interface YouTubePlayerProps {
     videoId: string;
@@ -25,6 +25,9 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
 
     const {
         currentTrack,
+        trackName,
+        trackImage,
+        artists,
         spotifyTrackID,
         setTrackIndex,
         trackIndex,
@@ -107,10 +110,10 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
         });
     };
 
-    const onPlayerStateChange = (event: YT.OnStateChangeEvent) => {
+    const onPlayerStateChange = async (event: YT.OnStateChangeEvent) => {
         if (event.data === YT.PlayerState.ENDED) {
             setIsPlaying(false);
-            nextSong();
+            await nextSong();
         }
     };
 
@@ -174,13 +177,52 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
         }
     }
 
+    const fetchYoutubeID = async (track: {
+        name: string;
+        artists: Artist[];
+        // spotify id
+        id: string;
+    }) => {
+        const dudes = track.artists.map((a: Artist) => a.name).join(", ");
+        const search = `${track.name} ${dudes} audio`;
+        const res = await fetch(`/api?search=${search}`);
+        const data = await res.json();
+        return data;
+    };
+
     // Next song
     async function nextSong() {
         if (playerRef.current && trackIndex < currentTrack.length - 1) {
+            //如果index 沒到達youtube IDs的陣列長度 就播放下一首歌
+            console.log("下一首歌");
             setTrackIndex((preIndex) => preIndex + 1);
-        } else {
+        }
+        // 如果youtubeuIDs陣列和spotifyIDs陣列的長度不一樣 就fetch推薦歌曲
+        else if (
+            playerRef.current &&
+            currentTrack.length !== spotifyTrackID.length
+        ) {
+            console.log("接續播放清單");
+
+            const track = {
+                name: trackName[trackIndex + 1],
+                artists: artists[trackIndex + 1],
+                id: spotifyTrackID[trackIndex + 1],
+            };
+            const youtubeID = await fetchYoutubeID(track);
+            setCurrentTrack((preCurrentTrack) => [
+                ...preCurrentTrack,
+                youtubeID.videoId,
+            ]);
+            setTrackIndex((preIndex) => preIndex + 1);
+        } else if (
+            playerRef.current &&
+            trackIndex === currentTrack.length - 1
+        ) {
             // 如果是最後一首歌 就推薦一首隨機歌曲
+            console.log("推薦");
             console.log(trackIndex);
+
             const data = await getRecommendations(spotifyTrackID[trackIndex]);
             const dudes = data.artists.map((a) => a.name).join(", ");
             // youtube api 使用歌曲名稱和藝術家名稱搜尋歌曲, 回傳youtube影片ID
@@ -202,11 +244,12 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     }
 
     function previousSong() {
-        if (playerRef.current && trackIndex > 0 && spotifyTrackID[0] !== "") {
+        if (playerRef.current && currentTrack.length > 1 && trackIndex > 0) {
             setTrackIndex((preIndex) => preIndex - 1);
         }
         console.log(trackIndex);
     }
+
     return (
         <div>
             <div id="player" ref={iframeRef} style={{ display: "none" }}></div>

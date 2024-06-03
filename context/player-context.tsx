@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
-import type { Artist } from "@/lib/types";
+import type { Artist, Track } from "@/lib/types";
 
 type TrackContextProviderProps = {
     children: React.ReactNode;
@@ -26,6 +26,9 @@ type TrackContext = {
     // 歌曲位置
     trackIndex: number;
     setTrackIndex: React.Dispatch<React.SetStateAction<number>>;
+    // 剩餘歌曲
+    remainingTracks: Track[];
+    setRemainingTracks: React.Dispatch<React.SetStateAction<Track[]>>;
 };
 
 export const TrackContext = createContext<TrackContext | null>(null);
@@ -33,12 +36,13 @@ export const TrackContext = createContext<TrackContext | null>(null);
 export default function TrackContextProvider({
     children,
 }: TrackContextProviderProps) {
-    const [spotifyTrackID, setSpotifyTrackID] = useState<string[]>([""]);
-    const [currentTrack, setCurrentTrack] = useState<string[]>([""]);
-    const [trackImage, setTrackImage] = useState<string[]>([""]);
-    const [trackName, setTrackName] = useState<string[]>([""]);
+    const [spotifyTrackID, setSpotifyTrackID] = useState<string[]>([]);
+    const [currentTrack, setCurrentTrack] = useState<string[]>([]);
+    const [trackImage, setTrackImage] = useState<string[]>([]);
+    const [trackName, setTrackName] = useState<string[]>([]);
     const [artists, setArtists] = useState<Artist[][]>([[]]);
     const [trackIndex, setTrackIndex] = useState<number>(0);
+    const [remainingTracks, setRemainingTracks] = useState<Track[]>([]);
 
     return (
         <TrackContext.Provider
@@ -55,6 +59,8 @@ export default function TrackContextProvider({
                 setArtists,
                 trackIndex,
                 setTrackIndex,
+                remainingTracks,
+                setRemainingTracks,
             }}
         >
             {children}

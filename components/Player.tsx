@@ -25,8 +25,15 @@ export default function Player() {
         return null;
     }
 
-    console.log("Spotify Tracks IDs" + spotifyTrackID);
-    console.log("track index " + trackIndex);
+    // console.log("目前所有歌名: " + trackName);
+    // console.log("目前所有的spotify id: " + spotifyTrackID);
+    // console.log("目前所有的spotify id 長度 = " + spotifyTrackID.length);
+
+    // console.log("目前youtube影片ID長度 = " + currentTrack.length);
+    // console.log("目前所有youtube影片ID: " + currentTrack);
+    // console.log("索引值: " + trackIndex);
+    // console.log("目前所有封面: " + trackImage);
+    // console.log("目前所有演出者: " + artists);
 
     return (
         <div className="flex justify-between items-center fixed bottom-0 w-full bg-black h-20">

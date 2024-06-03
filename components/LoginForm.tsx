@@ -9,6 +9,7 @@ import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 
 export default function LoginForm() {
     const [errorMsg, setErrorMsg] = useState<boolean>(false);
+    const [processing, setProcessing] = useState<string>("hidden");
     // 使用 react-hook-form 來處理表單
     const {
         register,
@@ -20,6 +21,7 @@ export default function LoginForm() {
     });
 
     const onSubmit = (data: LoginSchema) => {
+        setProcessing("flex");
         const user = {
             email: data.email,
             password: data.password,
@@ -30,7 +32,6 @@ export default function LoginForm() {
                 setErrorMsg(true);
             }
         });
-
         reset();
     };
 
@@ -76,10 +77,30 @@ export default function LoginForm() {
                     )}
                 </div>
                 <button
-                    className="rounded-full bg-spotify text-black py-3 mt-4 font-bold hover:bg-green-500 w-[324px]"
+                    className="flex justify-center rounded-full bg-spotify text-black py-3 mt-4 font-bold hover:bg-green-500 w-[324px]"
                     disabled={isSubmitting}
                 >
                     Log in
+                    <svg
+                        className={`animate-spin h-5 self-center ml-4 w-5 text-white ${processing}`}
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            stroke-width="4"
+                        ></circle>
+                        <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                    </svg>
                 </button>
             </form>
         </div>

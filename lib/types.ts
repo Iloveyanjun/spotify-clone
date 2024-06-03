@@ -60,3 +60,10 @@ export type PlaylistTrackData = {
     album: { name: string; id: string };
     artists: { name: string; id: string }[];
 };
+
+export type Track = {
+    name: string;
+    artists: Artist[];
+    id: string;
+    cover: string;
+};

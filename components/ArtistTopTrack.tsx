@@ -3,6 +3,7 @@
 import { useTrackContext } from "@/context/player-context";
 import Image from "next/image";
 import { Roboto_Mono } from "next/font/google";
+import { searchVideoId } from "@/apis/youtube";
 
 const roboto_mono = Roboto_Mono({
     subsets: ["latin"],
@@ -45,17 +46,33 @@ export default function ArtistTopTrack({
         const dudes = artists.map((a) => a.name).join(", ");
         const search = `${name} ${dudes} audio`;
 
-        const res = await fetch(`/api?search=${search}`);
-        const data = await res.json();
-        setTrackName((preTrackName) => [...preTrackName, name]);
-        setTrackImage((preTrackCover) => [...preTrackCover, image]);
-        setArtists((preArtists) => [...preArtists, artists.map((a) => a)]);
-        setSpotifyTrackID((preID) => [...preID, id]);
-        setCurrentTrack((preCurrentTrack) => [
-            ...preCurrentTrack,
-            data.videoId,
-        ]);
-        setTrackIndex(currentTrack.length);
+        const res = await searchVideoId(search);
+
+        if (!res) console.log("exceed youtube api limit");
+        else {
+            const videoId = res.items[0].id.videoId;
+            setTrackName((prevTrackName) => {
+                const newName = prevTrackName.slice(0, currentTrack.length);
+                return [...newName, name];
+            });
+
+            setTrackImage((prevTrackCover) => {
+                const newCover = prevTrackCover.slice(0, currentTrack.length);
+                return [...newCover, image];
+            });
+
+            setArtists((prevArtists) => {
+                const newArtists = prevArtists.slice(0, currentTrack.length);
+                return [...newArtists, artists];
+            });
+
+            setSpotifyTrackID((prevID) => {
+                const newID = prevID.slice(0, currentTrack.length);
+                return [...newID, id];
+            });
+            setCurrentTrack((preCurrentTrack) => [...preCurrentTrack, videoId]);
+            setTrackIndex(currentTrack.length);
+        }
     };
 
     return (

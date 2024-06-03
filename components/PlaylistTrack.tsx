@@ -5,6 +5,7 @@ import { Roboto_Mono } from "next/font/google";
 import Image from "next/image";
 import { useTrackContext } from "@/context/player-context";
 import { set } from "zod";
+import { searchVideoId } from "@/apis/youtube";
 
 const roboto_mono = Roboto_Mono({
     subsets: ["latin"],
@@ -50,19 +51,33 @@ export default function PlaylistTrack({
         const dudes = artists.map((a) => a.name).join(", ");
         // youtube api 使用歌曲名稱和藝術家名稱搜尋歌曲, 回傳youtube影片ID
         const search = `${name} ${dudes} audio`;
-        const res = await fetch(`/api?search=${search}`);
-        const data = await res.json();
-        setTrackName((preTrackName) => [...preTrackName, name]);
-        setTrackImage((preTrackCover) => [...preTrackCover, cover]);
-        setArtists((preArtists) => [...preArtists, artists]);
-        // 這是spotify歌曲ID
-        setSpotifyTrackID((preID) => [...preID, id]);
-        // 這是youtube影片ID 更新目前的歌曲
-        setCurrentTrack((preCurrentTrack) => [
-            ...preCurrentTrack,
-            data.videoId,
-        ]);
-        setTrackIndex(currentTrack.length);
+        const res = await searchVideoId(search);
+
+        if (!res) console.log("exceed youtube api limit");
+        else {
+            const videoId = res.items[0].id.videoId;
+            setTrackName((prevTrackName) => {
+                const newName = prevTrackName.slice(0, currentTrack.length);
+                return [...newName, name];
+            });
+
+            setTrackImage((prevTrackCover) => {
+                const newCover = prevTrackCover.slice(0, currentTrack.length);
+                return [...newCover, cover];
+            });
+
+            setArtists((prevArtists) => {
+                const newArtists = prevArtists.slice(0, currentTrack.length);
+                return [...newArtists, artists];
+            });
+
+            setSpotifyTrackID((prevID) => {
+                const newID = prevID.slice(0, currentTrack.length);
+                return [...newID, id];
+            });
+            setCurrentTrack((preCurrentTrack) => [...preCurrentTrack, videoId]);
+            setTrackIndex(currentTrack.length);
+        }
     };
 
     return (

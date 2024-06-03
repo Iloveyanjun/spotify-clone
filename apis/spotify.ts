@@ -92,7 +92,6 @@ export async function getAlbum(albumID: string) {
             headers: {
                 Authorization: "Bearer " + token.access_token,
             },
-            cache: "no-store",
         }
     );
 

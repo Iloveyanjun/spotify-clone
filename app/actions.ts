@@ -87,10 +87,8 @@ export async function removeLikedTrack(userID: string, trackID: string) {
     if (error) {
         console.log(error);
     }
-       revalidatePath("/collection/tracks");
-
+    revalidatePath("/collection/tracks");
 }
-
 
 // 檢查歌曲是否已經被添加到喜歡列表 如果已經添加返回true 否則返回false
 export async function checkTrackLiked(userID: string, trackID: string) {
