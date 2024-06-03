@@ -1,11 +1,17 @@
 import { createClient } from "@/utils/supabase/server";
 import puppeteer from "puppeteer-core";
-
+import chromium from "@sparticuz/chromium";
 import { revalidatePath } from "next/cache";
 
 // 爬取每周受歡迎的十個歌曲, 專輯, 藝術家
-export async function GET(request: Request) {
-    const browser = await puppeteer.launch();
+export async function GET(req: Request) {
+    const browser = await puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: true,
+        ignoreHTTPSErrors: true,
+    });
     const page = await browser.newPage();
     await page.goto(process.env.SPOTIFY_CHART_URL!);
 
