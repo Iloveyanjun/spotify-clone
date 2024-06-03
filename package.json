@@ -15,12 +15,13 @@
         "@mui/icons-material": "^5.15.16",
         "@mui/material": "^5.15.16",
         "@sparticuz/chromium": "^123.0.1",
+        "@sparticuz/chromium-min": "121.0.0",
         "@supabase/ssr": "^0.3.0",
         "@supabase/supabase-js": "^2.43.0",
         "@types/youtube": "^0.0.50",
-        "next": "^14.2.3",
         "chrome-aws-lambda": "10.1.0",
-        "puppeteer-core": "10.1.0",
+        "next": "^14.2.3",
+        "puppeteer-core": "^21.11.0",
         "react": "^18",
         "react-dom": "^18",
         "react-hook-form": "^7.51.4",
@@ -39,6 +40,6 @@
         "typescript": "^5"
     },
     "engines": {
-        "node": "16.x"
+        "node": "20.x"
     }
 }
