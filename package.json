@@ -14,18 +14,19 @@
         "@hookform/resolvers": "^3.3.4",
         "@mui/icons-material": "^5.15.16",
         "@mui/material": "^5.15.16",
-        "@sparticuz/chromium-min": "^123.0.1",
         "@supabase/ssr": "^0.3.0",
         "@supabase/supabase-js": "^2.43.0",
         "@types/youtube": "^0.0.50",
         "next": "^14.2.3",
-        "puppeteer-core": "^22.10.0",
         "react": "^18",
         "react-dom": "^18",
         "react-hook-form": "^7.51.4",
-        "zod": "^3.23.6"
+        "zod": "^3.23.6",
+        "@sparticuz/chromium": "110.0.0",
+        "puppeteer-core": "19.6.3"
     },
     "devDependencies": {
+        "@sparticuz/chromium": "^106.0.2",
         "@types/lodash": "^4.17.4",
         "@types/node": "^18",
         "@types/react": "^18",
