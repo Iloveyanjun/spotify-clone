@@ -5,8 +5,6 @@ import chromium from "@sparticuz/chromium";
 
 // 爬取每周受歡迎的十個歌曲, 專輯, 藝術家
 export async function GET(req: Request) {
-    const executablePath = await chromium.executablePath(); // 解析 Promise
-
     const browser = await puppeteer.launch({
         args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
         defaultViewport: chromium.defaultViewport,
