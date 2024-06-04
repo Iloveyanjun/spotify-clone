@@ -9,7 +9,7 @@ export async function GET(req: Request) {
         args: [...chromium.args, "--disable-web-security"],
         defaultViewport: chromium.defaultViewport,
         executablePath: await chromium.executablePath(
-            `https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar`
+            `https://github.com/Sparticuz/chromium/releases/download/v110.0.1/chromium-v110.0.1-pack.tar`
         ),
         headless: chromium.headless,
         ignoreHTTPSErrors: true,
