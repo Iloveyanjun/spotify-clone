@@ -1,14 +1,16 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
+import chromium from "@sparticuz/chromium-min";
 import puppeteer from "puppeteer-core";
-import chromium from "@sparticuz/chromium";
 
 // 爬取每周受歡迎的十個歌曲, 專輯, 藝術家
 export async function GET(req: Request) {
     const browser = await puppeteer.launch({
         args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
         defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath,
+        executablePath: await chromium.executablePath(
+            `https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar`
+        ),
         headless: chromium.headless,
         ignoreHTTPSErrors: true,
     });
