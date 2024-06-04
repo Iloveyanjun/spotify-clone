@@ -14,7 +14,6 @@
         "@hookform/resolvers": "^3.3.4",
         "@mui/icons-material": "^5.15.16",
         "@mui/material": "^5.15.16",
-        "@sparticuz/chromium": "^123.0.1",
         "@sparticuz/chromium-min": "^123.0.1",
         "@supabase/ssr": "^0.3.0",
         "@supabase/supabase-js": "^2.43.0",
@@ -24,12 +23,11 @@
         "react": "^18",
         "react-dom": "^18",
         "react-hook-form": "^7.51.4",
-        "swr": "^2.2.5",
         "zod": "^3.23.6"
     },
     "devDependencies": {
         "@types/lodash": "^4.17.4",
-        "@types/node": "^20",
+        "@types/node": "^18",
         "@types/react": "^18",
         "@types/react-dom": "^18",
         "eslint": "^8",
