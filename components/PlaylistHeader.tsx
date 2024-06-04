@@ -14,7 +14,7 @@ export default async function PlaylistHeader({ id }: { id: string }) {
     return (
         <div className="flex bg-gradient-to-b from-neutral-400 to-primary h-auto pt-14 pb-10">
             <Image
-                className="mx-5 rounded-md shadow-2xl"
+                className="mx-5 rounded-md shadow-2xl w-[200px] h-[200px] sm:hidden md:hidden lg:flex"
                 src={like}
                 alt="img"
                 width={200}

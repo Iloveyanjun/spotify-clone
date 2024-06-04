@@ -95,9 +95,9 @@ export default function AlbumTrack({
                 </div>
                 <div className="flex flex-col">
                     {/* track name */}
-                    <div className="text-base">{name}</div>
+                    <div className="text-base text-nowrap text-ellipsis overflow-hidden">{name}</div>
                     {/* track artists */}
-                    <div className="flex text-inactive">
+                    <div className="lg:flex  text-inactive">
                         {artists.map((artist, index) => (
                             <div key={index} className="flex">
                                 <Link

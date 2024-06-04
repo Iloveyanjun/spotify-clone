@@ -77,7 +77,7 @@ export default function ArtistTopTrack({
 
     return (
         <div
-            className="flex p-4 w-[55%] hover:bg-neutral-500/10 rounded-md hover:cursor-pointer"
+            className="flex p-4 lg:w-[55%] md:w-3/4 sm:w-full hover:bg-neutral-500/10 rounded-md hover:cursor-pointer"
             onClick={handleClick}
         >
             <div className="self-center mr-4 text-inactive">
@@ -85,10 +85,10 @@ export default function ArtistTopTrack({
                     {index + 1}
                 </button>
             </div>
-            <div className="mr-3">
+            <div className="mr-3 w-10 h-10 sm:hidden lg:flex">
                 <Image src={image} alt={name} width={40} height={40} />
             </div>
-            <div>{name}</div>
+            <div className="text-ellipsis text-nowrap overflow-hidden">{name}</div>
             <div
                 className={`ml-auto self-center text-inactive text-sm ${roboto_mono.className}`}
             >

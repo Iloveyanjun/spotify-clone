@@ -14,6 +14,7 @@
         "@hookform/resolvers": "^3.3.4",
         "@mui/icons-material": "^5.15.16",
         "@mui/material": "^5.15.16",
+        "@sparticuz/chromium": "^123.0.1",
         "@sparticuz/chromium-min": "^123.0.1",
         "@supabase/ssr": "^0.3.0",
         "@supabase/supabase-js": "^2.43.0",
@@ -38,6 +39,6 @@
         "typescript": "^5"
     },
     "engines": {
-        "node": "20.x"
+        "node": "18.x"
     }
 }

@@ -18,7 +18,7 @@ export default function LikeBtn() {
     const likeBtn = useRef<HTMLButtonElement>(null);
     const [isLiked, setIsLiked] = useState(false);
     // 獲取spotify歌曲ID 把spotify歌曲ID添加到喜歡列表
-    const { spotifyTrackID, trackIndex } = useTrackContext();
+    const { spotifyTrackID, trackIndex, currentTrack } = useTrackContext();
 
     // 使用useEffect檢查歌曲是否已經被添加到喜歡列表
     useEffect(() => {
@@ -44,18 +44,18 @@ export default function LikeBtn() {
         if (user === null) {
             // go to login page
             router.push("/login");
-        } else if (!spotifyTrackID) {
+        } else if (currentTrack.length === 0) {
             console.log("no track is playing");
         } else if (likeBtn.current) {
             // 如果按鈕為不喜歡狀態, 則添加動畫
-            if (!isLiked) {
+            if (!isLiked && currentTrack.length !== 0) {
                 likeBtn.current.classList.add(styles.animate);
                 setTimeout(() => {
                     likeBtn.current?.classList.remove(styles.animate);
                 }, 300);
             }
 
-            if (spotifyTrackID) {
+            if (spotifyTrackID && currentTrack.length !== 0) {
                 if (!isLiked) {
                     // 如果有播放的歌曲, 則添加到喜歡列表
                     await addLikedTrack(user.id, spotifyTrackID[trackIndex]);
