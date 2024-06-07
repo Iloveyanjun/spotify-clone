@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useTrackContext } from "@/context/player-context";
 import { set } from "zod";
 import { searchVideoId } from "@/apis/youtube";
+import { useEffect, useState } from "react";
 
 const roboto_mono = Roboto_Mono({
     subsets: ["latin"],
@@ -23,6 +24,8 @@ export default function PlaylistTrack({
 }: PlaylistTrackData) {
     const {
         currentTrack,
+        trackIndex,
+        spotifyTrackID,
         setSpotifyTrackID,
         setCurrentTrack,
         setTrackImage,
@@ -44,6 +47,22 @@ export default function PlaylistTrack({
         month: "long",
         day: "numeric",
     });
+
+    function changeStyle() {
+        if (spotifyTrackID[trackIndex] === id) {
+            setPlayingStyle("text-spotify");
+        } else {
+            setPlayingStyle("");
+        }
+    }
+    const [playingStyle, setPlayingStyle] = useState("");
+    useEffect(() => {
+        changeStyle();
+    }, [spotifyTrackID, trackIndex, id]);
+
+    useEffect(() => {
+        changeStyle();
+    }, []);
 
     const handleClick = async (e: any) => {
         e.preventDefault();
@@ -106,7 +125,7 @@ export default function PlaylistTrack({
                 </div>
                 <div className="flex flex-col">
                     {/* track name */}
-                    <div className="text-base">{name}</div>
+                    <div className={`text-base ${playingStyle}`}>{name}</div>
                     {/* track artists */}
                     <div className="flex text-inactive">
                         {artists.map((artist, index) => (

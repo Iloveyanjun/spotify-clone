@@ -6,12 +6,12 @@ import Link from "next/link";
 export default function RoundedCard({
     name,
     image,
-    type,
+    description,
     id,
 }: {
     name: string;
     image: any;
-    type: string;
+    description: string;
     id: string;
 }) {
     return (
@@ -28,9 +28,9 @@ export default function RoundedCard({
                 draggable={false}
                 priority
             />
-            <PlayBtn type="artist" id={id}/>
+            <PlayBtn type="artist" id={id} on="card" size="large"/>
             <h2 className="text-white mt-2">{name}</h2>
-            <h4 className="text-type">{type}</h4>
+            <h4 className="text-type">{description}</h4>
         </Link>
     );
 }

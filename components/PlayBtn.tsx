@@ -5,7 +5,30 @@ import { getAlbum, getArtistTopTracks } from "@/apis/spotify";
 import { useTrackContext } from "@/context/player-context";
 import { Artist, Track } from "@/lib/types";
 
-export default function PlayBtn({ type, id }: { type: string; id: string }) {
+export default function PlayBtn({
+    type,
+    id,
+    on,
+    size = "large",
+}: {
+    type: string;
+    id: string;
+    on: string;
+    size: "large" | "medium" | "small";
+}) {
+    let style;
+    let container;
+    if (on !== "card") {
+        style = "transition";
+        container = "flex";
+    } else {
+        container = "absolute right-5 top-40 z-10";
+        if (size === "medium") {
+            container = "absolute right-[10px] top-[120px] z-10";
+        }
+        style =
+            "ease-out opacity-0 transition group-hover:-translate-y-5  group-hover:opacity-100";
+    }
     const {
         trackIndex,
         setSpotifyTrackID,
@@ -65,14 +88,12 @@ export default function PlayBtn({ type, id }: { type: string; id: string }) {
     };
 
     return (
-        <div className="absolute right-5 top-40">
+        <div className={`${container}`}>
             <button
                 onClick={handlePlay}
-                className="
-            bg-spotify p-2 rounded-full active:scale-[1.1] ease-out opacity-0 transition 
-            group-hover:-translate-y-5  group-hover:opacity-100 hover:scale-[1.05] "
+                className={`bg-spotify p-2 rounded-full active:scale-[1.1] hover:scale-[1.05] ${style}`}
             >
-                <PlayArrowIcon className="text-black w-[40px] h-[40px]" />
+                <PlayArrowIcon className={`text-black`} fontSize={size} />
             </button>
         </div>
     );

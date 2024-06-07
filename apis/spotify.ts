@@ -181,7 +181,7 @@ export async function getArtistTopTracks(artistID: string) {
 export async function getArtistAlbums(artistID: string) {
     const token = await getAccessToken();
     const res = await fetch(
-        `https://api.spotify.com/v1/artists/${artistID}/albums?market=US&limit=40`,
+        `https://api.spotify.com/v1/artists/${artistID}/albums?market=US&limit=20`,
         {
             method: "GET",
             headers: {

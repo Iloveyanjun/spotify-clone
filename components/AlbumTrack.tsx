@@ -3,8 +3,8 @@
 import { useTrackContext } from "@/context/player-context";
 import Link from "next/link";
 import { Roboto_Mono } from "next/font/google";
-import { set } from "zod";
 import { searchVideoId } from "@/apis/youtube";
+import { useEffect, useState } from "react";
 
 const roboto_mono = Roboto_Mono({
     subsets: ["latin"],
@@ -26,7 +26,9 @@ export default function AlbumTrack({
     cover: string;
 }) {
     const {
+        spotifyTrackID,
         currentTrack,
+        trackIndex,
         setSpotifyTrackID,
         setCurrentTrack,
         setTrackImage,
@@ -34,6 +36,16 @@ export default function AlbumTrack({
         setArtists,
         setTrackIndex,
     } = useTrackContext();
+
+    // 播放中的歌曲樣式
+    const [playingStyle, setPlayingStyle] = useState("");
+    useEffect(() => {
+        if (spotifyTrackID[trackIndex] === id) {
+            setPlayingStyle("text-spotify");
+        } else {
+            setPlayingStyle("");
+        }
+    }, [spotifyTrackID, trackIndex, id]);
 
     // 計算歌曲時間
     const mins = Math.floor(duration / 1000 / 60);
@@ -80,7 +92,7 @@ export default function AlbumTrack({
 
     return (
         <div
-            className="flex mx-3 justify-between py-2 hover:bg-neutral-500/10 hover:cursor-pointer select-none"
+            className={`flex mx-3 justify-between py-2 hover:bg-neutral-500/10 hover:cursor-pointer select-none `}
             onClick={handleClick}
         >
             <div className="flex cursor-pointer">
@@ -95,7 +107,11 @@ export default function AlbumTrack({
                 </div>
                 <div className="flex flex-col">
                     {/* track name */}
-                    <div className="text-base text-nowrap text-ellipsis overflow-hidden">{name}</div>
+                    <div
+                        className={`text-base text-nowrap text-ellipsis overflow-hidden ${playingStyle}`}
+                    >
+                        {name}
+                    </div>
                     {/* track artists */}
                     <div className="lg:flex  text-inactive">
                         {artists.map((artist, index) => (

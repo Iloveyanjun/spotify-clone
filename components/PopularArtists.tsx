@@ -30,7 +30,7 @@ export default async function PopularArtists() {
                         id={data[weeklyTopData.indexOf(artist)].id}
                         name={artist.artists}
                         image={data[weeklyTopData.indexOf(artist)].image_url}
-                        type="artist"
+                        description="artist"
                     />
                 ))}
             </div>

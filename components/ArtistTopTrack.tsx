@@ -4,6 +4,8 @@ import { useTrackContext } from "@/context/player-context";
 import Image from "next/image";
 import { Roboto_Mono } from "next/font/google";
 import { searchVideoId } from "@/apis/youtube";
+import { use, useEffect, useState } from "react";
+import { set } from "lodash";
 
 const roboto_mono = Roboto_Mono({
     subsets: ["latin"],
@@ -15,7 +17,6 @@ export default function ArtistTopTrack({
     name, // 歌曲名稱
     duration, // 歌曲時間
     image, // 歌曲封面
-    mainArtist, // 主要演出者
     artists, // 演出者
 }: {
     index: number;
@@ -23,18 +24,36 @@ export default function ArtistTopTrack({
     name: string;
     duration: number;
     image: string;
-    mainArtist: string;
     artists: { name: string; id: string }[];
 }) {
     const {
         setSpotifyTrackID,
         currentTrack,
+        spotifyTrackID,
+        trackIndex,
         setCurrentTrack,
         setTrackImage,
         setTrackName,
         setArtists,
         setTrackIndex,
     } = useTrackContext();
+
+    function changeStyle() {
+        if (spotifyTrackID[trackIndex] === id) {
+            setPlayingStyle("text-spotify");
+        } else {
+            setPlayingStyle("");
+        }
+    }
+
+    const [playingStyle, setPlayingStyle] = useState("");
+    useEffect(() => {
+        changeStyle();
+    }, [spotifyTrackID, trackIndex, id]);
+
+    useEffect(() => {
+        changeStyle();
+    }, []);
 
     const mins = Math.floor(duration / 1000 / 60);
     const secs = Math.floor((duration / 1000 / 60 - mins) * 60)
@@ -86,9 +105,20 @@ export default function ArtistTopTrack({
                 </button>
             </div>
             <div className="mr-3 w-10 h-10 sm:hidden lg:flex">
-                <Image src={image} alt={name} width={40} height={40} />
+                <Image
+                    className="w-10 h-10"
+                    src={image}
+                    alt={name}
+                    width={40}
+                    height={40}
+                    draggable={false}
+                />
             </div>
-            <div className="text-ellipsis text-nowrap overflow-hidden">{name}</div>
+            <div
+                className={`text-ellipsis text-nowrap overflow-hidden ${playingStyle}`}
+            >
+                {name}
+            </div>
             <div
                 className={`ml-auto self-center text-inactive text-sm ${roboto_mono.className}`}
             >

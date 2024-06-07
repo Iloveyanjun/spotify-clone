@@ -43,9 +43,9 @@ export default function VolumeSlider({ volume, setVolume }: VolumeSliderProps) {
                 ) : (
                     <VolumeUpIcon />
                 )}
-                <span className="absolute top-[-80%] left-1/2 transform -translate-x-1/2 bg-secondary text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 group-hover:delay-300 transition-opacity duration-300">
+                {/* <span className="absolute top-[-80%] left-1/2 transform -translate-x-1/2 bg-secondary text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 group-hover:delay-300 transition-opacity duration-300">
                     {volume === 0 ? "Unmute" : "Mute"}
-                </span>
+                </span> */}
             </button>
             <input
                 type="range"

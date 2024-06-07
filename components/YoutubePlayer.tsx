@@ -118,8 +118,8 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     };
 
     const onPlayerReady = (event: YT.PlayerEvent) => {
-        event.target.playVideo(); // 播放影片
         if (playerRef.current) {
+            event.target.playVideo(); // 播放影片
             const getVideoDuration = playerRef.current?.getDuration();
             // 獲得影片時間長度
             const minutes = Math.floor(getVideoDuration / 60);

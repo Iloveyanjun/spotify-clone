@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+const PlayBtn = dynamic(() => import("@/components/PlayBtn"), { ssr: false });
 
 export default function ProfileDiscography({
     // albumID,
@@ -20,17 +22,24 @@ export default function ProfileDiscography({
     return (
         <Link
             href={`/${type}/${id}`}
-            className="flex flex-col hover:bg-neutral-500/10 rounded-md p-3 w-[170px]"
+            className="relative group flex flex-col hover:bg-neutral-500/10 rounded-md p-3 w-[170px]"
         >
-            <div>
+            <div className="relative">
                 <Image
+                    className="rounded-md object-cover"
                     src={image}
                     alt={name}
                     width={150}
                     height={150}
-                    className="rounded-md"
+                    draggable={false}
                 />
-                <h3 className="flex ">{name}</h3>
+                <PlayBtn type={type} id={id} on="card" size="medium" />
+                <h3
+                    className="block min-w-0 text-ellipsis text-nowrap overflow-hidden"
+                    title={name}
+                >
+                    {name}
+                </h3>
                 <div className="flex text-inactive text-sm">
                     <p>{year}</p>
                     <p className="mx-1">•</p>

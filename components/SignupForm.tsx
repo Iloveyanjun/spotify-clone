@@ -53,7 +53,7 @@ export default function SignupForm() {
                     </label>
                     <input
                         {...register("password")}
-                        type="text"
+                        type="password"
                         className="w-[324px] rounded-sm px-4 py-3 mt-2 bg-secondary border border-gray-500 hover:border-white transition-[0.3s]"
                         name="password"
                     />
@@ -66,7 +66,7 @@ export default function SignupForm() {
                     </label>
                     <input
                         {...register("confirmPassword")}
-                        type="text"
+                        type="password"
                         className="w-[324px] rounded-sm px-4 py-3 mt-2 bg-secondary border border-gray-500 hover:border-white transition-[0.3s]"
                         name="confirmPassword"
                     />

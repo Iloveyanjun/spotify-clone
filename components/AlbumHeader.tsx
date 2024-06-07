@@ -55,6 +55,7 @@ export default async function AlbumHeader({ id }: { id: string }) {
                     </div>
                 </div>
             </div>
+            
         </div>
     );
 }
