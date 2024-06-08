@@ -36,7 +36,7 @@ export default function LikeBtn() {
             }
         }
         checkLiked();
-    }, [trackIndex]);
+    }, [trackIndex, spotifyTrackID]);
 
     // 喜歡按鈕的點擊事件
     async function handleClick() {

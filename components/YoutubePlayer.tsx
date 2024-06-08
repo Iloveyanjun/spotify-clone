@@ -7,6 +7,7 @@ import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import { getRecommendations } from "@/apis/spotify";
 import { Artist } from "@/lib/types";
+import { set } from "lodash";
 
 interface YouTubePlayerProps {
     videoId: string;
@@ -26,16 +27,16 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     const {
         currentTrack,
         trackName,
-        trackImage,
         artists,
         spotifyTrackID,
-        setTrackIndex,
         trackIndex,
+        setTrackIndex,
         setCurrentTrack,
         setArtists,
         setTrackName,
         setTrackImage,
         setSpotifyTrackID,
+        setCurrentTime,
     } = useTrackContext();
 
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -135,14 +136,17 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     // 更新目前影片播放到哪裡 每秒更新一次
     function updateCurrentTime() {
         if (!isDragging && playerRef.current) {
-            const currentTime = Math.floor(playerRef.current?.getCurrentTime());
+            const floatTime = playerRef.current?.getCurrentTime();
+
+            const currentTime = Math.floor(floatTime);
             const minutes = Math.floor(currentTime / 60);
             const seconds = Math.floor(currentTime % 60);
             setProgress(`${minutes}:${seconds.toString().padStart(2, "0")}`);
             setProgressSec(currentTime);
+            setCurrentTime(floatTime * 1000);
         }
 
-        setTimeout(updateCurrentTime, 1000); // 每秒更新一次
+        requestAnimationFrame(updateCurrentTime);
     }
 
     // 拖曳進度條時 進度條以及影片播放時間更新為 拖曳的時間

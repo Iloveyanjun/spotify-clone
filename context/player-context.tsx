@@ -26,6 +26,9 @@ type TrackContext = {
     // 歌曲位置
     trackIndex: number;
     setTrackIndex: React.Dispatch<React.SetStateAction<number>>;
+    // 目前歌曲時間
+    currentTime: number;
+    setCurrentTime: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const TrackContext = createContext<TrackContext | null>(null);
@@ -39,6 +42,7 @@ export default function TrackContextProvider({
     const [trackName, setTrackName] = useState<string[]>([]);
     const [artists, setArtists] = useState<Artist[][]>([[]]);
     const [trackIndex, setTrackIndex] = useState<number>(0);
+    const [currentTime, setCurrentTime] = useState<number>(0);
 
     return (
         <TrackContext.Provider
@@ -55,6 +59,8 @@ export default function TrackContextProvider({
                 setArtists,
                 trackIndex,
                 setTrackIndex,
+                currentTime,
+                setCurrentTime,
             }}
         >
             {children}
