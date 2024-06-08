@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Spotify Clone
+使用next.js, supabase, vercel, tailwindcss的簡易版spotify複製
+## 功能
+* 用戶註冊/登入
+* 按讚喜歡的歌曲
+* 歌曲歌詞同步
+* 播放完畢後推薦歌曲
+* 進度條跳轉音樂
 
-## Getting Started
+### 如何在本地運行
+確保你有安裝[node.js](https://nodejs.org/en)
+打開`.env.example`
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SPOTIFY_CLIENT_ID=
+SPOTIFY_CLIENT_SECRET=
+YOUTUBE_API_KEY=
+```
+把你的[supabase](https://supabase.com/), [vercel](https://vercel.com/), [google](https://console.cloud.google.com/)以及[spotify](https://developer.spotify.com/)中的API KEY輸入進去。並把名字改為`.env.local`
 
-First, run the development server:
-
-```bash
+在終端輸入
+```
+npm i
+```
+最後就能運行了
+```
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
