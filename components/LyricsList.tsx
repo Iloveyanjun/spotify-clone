@@ -28,7 +28,7 @@ export default function LyricsList() {
         }
         fetchData();
     }, [trackIndex]);
-
+    // 目前歌詞的index
     useEffect(() => {
         for (let i = lyricsData.length - 1; i >= 0; i--) {
             if (currentTime >= Number(lyricsData[i].startTimeMs)) {
@@ -61,7 +61,10 @@ export default function LyricsList() {
                 >
                     <Lyrics
                         words={lyric.words}
-                        isHighlighted={index === currentIndex && currentTime > lyricsData[0].startTimeMs}
+                        isHighlighted={
+                            index === currentIndex &&
+                            currentTime > lyricsData[0].startTimeMs
+                        }
                     />
                 </div>
             ))}

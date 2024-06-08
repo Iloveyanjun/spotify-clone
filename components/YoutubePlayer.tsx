@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import { useTrackContext } from "@/context/player-context";
@@ -7,7 +7,6 @@ import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import { getRecommendations } from "@/apis/spotify";
 import { Artist } from "@/lib/types";
-import { set } from "lodash";
 
 interface YouTubePlayerProps {
     videoId: string;
@@ -23,6 +22,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     const progressRef = useRef<HTMLInputElement>(null);
     const playerRef = useRef<YT.Player | null>(null);
     const iframeRef = useRef<HTMLDivElement>(null);
+    const requestRef = useRef<number | null>(null);
 
     const {
         currentTrack,
@@ -146,10 +146,22 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
             setCurrentTime(floatTime * 1000);
         }
 
-        requestAnimationFrame(updateCurrentTime);
+        if (!isDragging) {
+            requestRef.current = requestAnimationFrame(updateCurrentTime);
+        }
     }
 
-    // 拖曳進度條時 進度條以及影片播放時間更新為 拖曳的時間
+    useEffect(() => {
+        requestRef.current = requestAnimationFrame(updateCurrentTime);
+        return () => {
+            // 清除 requestAnimationFrame
+            if (requestRef.current) {
+                cancelAnimationFrame(requestRef.current);
+            }
+        };
+    }, [isDragging]);
+
+    // 拖動進度條時 進度條以及影片播放時間更新為 拖動的時間
     function draggingTime(e: React.ChangeEvent<HTMLInputElement>) {
         setIsDragging(true);
         if (playerRef.current) {
@@ -158,6 +170,14 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
             const minutes = Math.floor(draggingTime / 60);
             const seconds = Math.floor(draggingTime % 60);
             setProgress(`${minutes}:${seconds.toString().padStart(2, "0")}`);
+        }
+    }
+    // 拖曳進度條結束時 更新影片播放時間
+    function handleMouseUp() {
+        setIsDragging(false);
+        if (playerRef.current) {
+            const value = Number(progressRef.current?.value);
+            playerRef.current?.seekTo(value, true);
         }
     }
 
@@ -172,14 +192,6 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
             setIsPlaying(!isPlaying);
         }
     };
-    // 拖曳進度條結束時 更新影片播放時間
-    function handleMouseUp() {
-        setIsDragging(false);
-        if (playerRef.current) {
-            const value = Number(progressRef.current?.value);
-            playerRef.current?.seekTo(value, true);
-        }
-    }
 
     const fetchYoutubeID = async (track: {
         name: string;
@@ -225,7 +237,6 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
         ) {
             // 如果是最後一首歌 就推薦一首隨機歌曲
             console.log("推薦");
-            console.log(trackIndex);
 
             const data = await getRecommendations(spotifyTrackID[trackIndex]);
             const dudes = data.artists.map((a) => a.name).join(", ");
@@ -249,9 +260,11 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
 
     function previousSong() {
         if (playerRef.current && currentTrack.length > 1 && trackIndex > 0) {
+            console.log("上一首歌");
             setTrackIndex((preIndex) => preIndex - 1);
         }
-        console.log(trackIndex);
+        console.log("沒有上一首歌了");
+        
     }
 
     return (
@@ -303,7 +316,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
                         value={progressSec}
                         className="lg:w-[550px] md:w-[350px] sm:w-[200px] progress-slider"
                         ref={progressRef}
-                        onChange={draggingTime}
+                        onInput={draggingTime}
                         onMouseUp={handleMouseUp}
                     />
                     <div className="ml-2 p-0">{duration}</div>
